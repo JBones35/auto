@@ -1,0 +1,144 @@
+# Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# siehe app.module.ts
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+"Funktionen, um Autodaten zu lesen"
+type Query {
+  autos(suchkriterien: SuchkriterienInput): [Auto!]
+
+  auto(id: ID!): Auto
+}
+
+"Funktionen, um Autos neu anzulegen, zu aktualisieren oder zu löschen"
+type Mutation {
+  create(input: AutoInput!): CreatePayload
+
+  update(input: AutoUpdateInput!): UpdatePayload
+
+  delete(id: ID!): Boolean
+
+  # Mutation, wenn z.B. der Login-Zeitpunkt im IDM-System gespeichert wird
+  token(username: String!, password: String!): TokenResult
+  refresh(refresh_token: String!): TokenResult
+}
+
+"Daten zum Motor eines Autos"
+type Motor {
+  name: String!
+  ps: Int
+  zylinder: Int
+  drehzahl: Float
+}
+
+"Daten zur Reperatur eines Autos"
+type Reperatur {
+  kosten: Float
+  mechaniker: String!
+  datum: String
+}
+
+"Datenschema zu einem Auto, das gelesen wird"
+type Auto {
+  # ID ist bei Apollo ein String
+  id: Int!
+  version: Int!
+  fahrgestellnummer: String!
+  marke: String!
+  modell: String!
+  baujahr: Int
+  art: Art
+  preis: Float!
+  sicherheitsmerkmale: [String]
+  # 1:1-Beziehung
+  motor: Motor!
+}
+
+"Enum-Typ für die Art eines Autos"
+enum Art {
+  PKW
+  LKW
+}
+
+"Suchkriterien für Autos"
+input SuchkriterienInput {
+  motor: String
+  marke: String
+  modell: Int
+  art: Art
+  baujahr: Int
+}
+
+"Daten zum Titel eines neuen Autos"
+input MotorInput {
+  name: String!
+  ps: Int
+  zylinder: Int
+  drehzahl: Float
+}
+
+"Daten zu den Abbildungen eines Autos"
+input ReperaturInput {
+  kosten: Float
+  mechaniker: String!
+  datum: String
+}
+
+"Daten für ein neues Auto"
+input AutoInput {
+  fahrgestellnummer: String!
+  marke: String!
+  modell: String!
+  baujahr: Int
+  art: Art
+  preis: Float!
+  sicherheitsmerkmale: [String]
+  # 1:1-Beziehung
+  motor: MotorInput!
+  reperaturen: [ReperaturInput]
+}
+
+type CreatePayload {
+  id: Int
+}
+
+"Daten für ein zu änderndes Auto"
+input AutoUpdateInput {
+  id: ID
+  version: Int
+  fahrgestellnummer: String
+  marke: String
+  modell: String
+  baujahr: Int
+  art: Art
+  preis: Float!
+  sicherheitsmerkmale: [String]
+}
+
+type UpdatePayload {
+  version: Int
+}
+
+type TokenResult {
+  access_token: String!
+  expires_in: Int!
+  refresh_token: String!
+  refresh_expires_in: Int!
+}

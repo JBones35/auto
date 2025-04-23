@@ -43,7 +43,7 @@ describe('DELETE /rest', () => {
         });
     });
 
-    test.concurrent('Vorhandenes Buch loeschen', async () => {
+    test.concurrent('Vorhandenes Auto loeschen', async () => {
         // given
         const url = `/${id}`;
         const headers: Record<string, string> = {
@@ -61,7 +61,7 @@ describe('DELETE /rest', () => {
         expect(data).toBeDefined();
     });
 
-    test.concurrent('Buch loeschen, aber ohne Token', async () => {
+    test.concurrent('Auto loeschen, aber ohne Token', async () => {
         // given
         const url = `/${id}`;
 
@@ -73,7 +73,7 @@ describe('DELETE /rest', () => {
         expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
-    test.concurrent('Buch loeschen, aber mit falschem Token', async () => {
+    test.concurrent('Autos loeschen, aber mit falschem Token', async () => {
         // given
         const url = `/${id}`;
         const token = 'FALSCH';
@@ -89,7 +89,7 @@ describe('DELETE /rest', () => {
         expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
-    test.concurrent('Vorhandenes Buch als "user" loeschen', async () => {
+    test.concurrent('Vorhandenes Auto als "user" loeschen', async () => {
         // given
         const url = `/60`;
         const headers: Record<string, string> = {

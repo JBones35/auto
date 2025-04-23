@@ -51,22 +51,21 @@ class AutoRequests(HttpUser):
             self.client.get(f"/rest/{auto_id}")
 
     @task(200)
-    def get_titel(self) -> None:
-        """GET-Requests mit Query-Parameter: Teilstring des Autotitels."""
-        titel_list = ["a", "l", "t", "i", "p"]
-        for teil in titel_list:
-            self.client.get("/rest", params={"titel": teil})
+    def get_motorname(self) -> None:
+        """GET-Requests mit Query-Parameter: Teilstring des Motornamens."""
+        motorname_list = ["a", "l", "t", "i", "p"]
+        for motorname in motorname_list:
+            self.client.get("/rest", params={"motor": motorname})
 
     @task(150)
-    def get_isbn(self) -> None:
-        """GET-Requests mit Query-Parameter: ISBN-Nummer."""
-        isbn_list: Final = [
-            "978-3-897-22583-1",
-            "978-3-827-31552-6",
-            "978-0-201-63361-0",
-            "978-0-007-09732-6",
-            "978-3-824-40481-0",
-            "978-3-540-43081-0",
+    def get_fahrgestellnummer(self) -> None:
+        """GET-Requests mit Query-Parameter: Fahrgestellnummern."""
+        fahrgestellnummer_list: Final = [
+            "WVWZZZ1JZXW000002",
+            "WVWZZZ1JZXW000001",
+            "WVWZZZ1JZXW000003",
+            "WVWZZZ1JZXW000004",
+            "WVWZZZ1JZXW000005",
         ]
-        for isbn in isbn_list:
-            self.client.get("/rest", params={"isbn": isbn})
+        for fahrgestellnummer in fahrgestellnummer_list:
+            self.client.get("/rest", params={"fahrgestellnummer": fahrgestellnummer})

@@ -80,13 +80,14 @@ enum Art {
 "Suchkriterien für Autos"
 input SuchkriterienInput {
   motor: String
+  fahrgestellnummer: String
   marke: String
   modell: Int
   art: Art
   baujahr: Int
 }
 
-"Daten zum Titel eines neuen Autos"
+"Daten zum Motor eines neuen Autos"
 input MotorInput {
   name: String!
   ps: Int
@@ -94,7 +95,7 @@ input MotorInput {
   drehzahl: Float
 }
 
-"Daten zu den Abbildungen eines Autos"
+"Daten zu den Reperaturen eines Autos"
 input ReperaturInput {
   kosten: Float
   mechaniker: String!

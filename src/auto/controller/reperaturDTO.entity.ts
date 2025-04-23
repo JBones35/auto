@@ -50,7 +50,7 @@ export class DecimalMin implements ValidatorConstraintInterface {
 }
 
 /**
- * Entity-Klasse für Abbildung ohne TypeORM.
+ * Entity-Klasse für Reperaturen ohne TypeORM.
  */
 export class ReperaturDTO {
     @IsOptional()

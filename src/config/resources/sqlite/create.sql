@@ -56,4 +56,4 @@ CREATE TABLE IF NOT EXISTS reperatur (
     datum           TEXT,
     auto_id         INTEGER NOT NULL REFERENCES auto
 );
-CREATE INDEX IF NOT EXISTS abbildung_auto_id_idx ON abbildung(auto_id);
+CREATE INDEX IF NOT EXISTS reperatur_auto_id_idx ON reperatur(auto_id);

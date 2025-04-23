@@ -73,7 +73,7 @@ export class AutoWriteController {
      * dass damit das neu angelegte Auto abgerufen werden kann.
      *
      * Falls Constraints verletzt sind, wird der Statuscode `400` (`Bad Request`)
-     * gesetzt und genauso auch wenn der Titel oder die ISBN-Nummer bereits
+     * gesetzt und genauso auch wenn der Motor oder die Fahrgestellnummer bereits
      * existieren.
      *
      * @param autoDTO JSON-Daten für ein Auto im Request-Body.
@@ -175,7 +175,7 @@ export class AutoWriteController {
      * required`) gesetzt; und falls sie nicht korrekt ist, der Statuscode `412`
      * (`Precondition failed`). Falls Constraints verletzt sind, wird der
      * Statuscode `400` (`Bad Request`) gesetzt und genauso auch wenn der neue
-     * Titel oder die neue ISBN-Nummer bereits existieren.
+     * Motor oder die neue Farhgestellnummer bereits existieren.
      *
      * @param autoDTO Autodaten im Body des Request-Objekts.
      * @param id Pfad-Paramater für die ID.

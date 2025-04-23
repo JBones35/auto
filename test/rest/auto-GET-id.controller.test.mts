@@ -35,7 +35,7 @@
 import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { type Buch } from '../../src/buch/entity/buch.entity.js';
+import { type Auto } from '../../src/auto/entity/auto.entity.js';
 import { baseURL, httpsAgent } from '../constants.mjs';
 import { type ErrorResponse } from './error-response.mjs';
 
@@ -64,12 +64,12 @@ describe('GET /rest/:id', () => {
         });
     });
 
-    test.concurrent('Buch zu vorhandener ID', async () => {
+    test.concurrent('Auto zu vorhandener ID', async () => {
         // given
         const url = `/${idVorhanden}`;
 
         // when
-        const { status, headers, data }: AxiosResponse<Buch> =
+        const { status, headers, data }: AxiosResponse<Auto> =
             await client.get(url);
 
         // then
@@ -81,7 +81,7 @@ describe('GET /rest/:id', () => {
         expect(id?.toString()).toBe(idVorhanden);
     });
 
-    test.concurrent('Kein Buch zu nicht-vorhandener ID', async () => {
+    test.concurrent('Kein Auto zu nicht-vorhandener ID', async () => {
         // given
         const url = `/${idNichtVorhanden}`;
 
@@ -99,7 +99,7 @@ describe('GET /rest/:id', () => {
         expect(statusCode).toBe(HttpStatus.NOT_FOUND);
     });
 
-    test.concurrent('Kein Buch zu falscher ID', async () => {
+    test.concurrent('Kein Auto zu falscher ID', async () => {
         // given
         const url = `/${idFalsch}`;
 
@@ -116,7 +116,7 @@ describe('GET /rest/:id', () => {
         expect(statusCode).toBe(HttpStatus.NOT_FOUND);
     });
 
-    test.concurrent('Buch zu vorhandener ID mit ETag', async () => {
+    test.concurrent('Auto zu vorhandener ID mit ETag', async () => {
         // given
         const url = `/${idVorhandenETag}`;
 

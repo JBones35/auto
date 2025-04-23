@@ -21,8 +21,8 @@ export class Reperatur {
     })
     readonly kosten: Decimal | undefined;
 
-    @Column()
-    readonly mechaniker!: string;
+    @Column('varchar')
+    readonly mechaniker: string | undefined;
 
     @Column('date')
     readonly datum: Date | string | undefined;

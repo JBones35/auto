@@ -18,30 +18,25 @@ import { type GraphQLRequest } from '@apollo/server';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { type Buch, type BuchArt } from '../../src/buch/entity/buch.entity.js';
+import { type Auto, type AutoArt } from '../../src/auto/entity/auto.entity.js';
 import { type GraphQLResponseBody } from './graphql.mjs';
 import { baseURL, httpsAgent } from '../constants.mjs';
 
-type BuchDTO = Omit<
-    Buch,
-    'abbildungen' | 'aktualisiert' | 'erzeugt' | 'rabatt'
-> & {
-    rabatt: string;
-};
+type AutoDTO = Omit<Auto, 'reperaturen' | 'aktualisiert' | 'erzeugt'>;
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const idVorhanden = '1';
+const idVorhanden = '20';
 
-const titelVorhanden = 'Alpha';
-const teilTitelVorhanden = 'a';
-const teilTitelNichtVorhanden = 'abc';
+const motornameVorhanden = 'Delta';
+const teilMotornameVorhanden = 'a';
+const teilMotornameNichtVorhanden = 'abc';
 
-const isbnVorhanden = '978-3-897-22583-1';
+const fahrgestellnummerVorhanden = 'WVWZZZ1JZXW000002';
 
-const ratingMin = 3;
-const ratingNichtVorhanden = 99;
+const baujahrMin = 2019;
+const baujahrNichtVorhanden = 2053;
 
 // -----------------------------------------------------------------------------
 // T e s t s
@@ -63,25 +58,23 @@ describe('GraphQL Queries', () => {
         });
     });
 
-    test.concurrent('Buch zu vorhandener ID', async () => {
+    test.concurrent('Auto zu vorhandener ID', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buch(id: "${idVorhanden}") {
+                    auto(id: "${idVorhanden}") {	
+                        fahrgestellnummer
                         version
-                        isbn
-                        rating
+                        marke
+                        modell
+                        baujahr
                         art
                         preis
-                        lieferbar
-                        datum
-                        homepage
-                        schlagwoerter
-                        titel {
-                            titel
+                        sicherheitsmerkmale
+                        motor {
+                            name
                         }
-                        rabatt(short: true)
                     }
                 }
             `,
@@ -97,22 +90,22 @@ describe('GraphQL Queries', () => {
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
-        const { buch } = data.data! as { buch: BuchDTO };
+        const { auto } = data.data! as { auto: AutoDTO };
 
-        expect(buch.titel?.titel).toMatch(/^\w/u);
-        expect(buch.version).toBeGreaterThan(-1);
-        expect(buch.id).toBeUndefined();
+        expect(auto.motor?.name).toMatch(/^\w/u);
+        expect(auto.version).toBeGreaterThan(-1);
+        expect(auto.id).toBeUndefined();
     });
 
-    test.concurrent('Buch zu nicht-vorhandener ID', async () => {
+    test.concurrent('Auto zu nicht-vorhandener ID', async () => {
         // given
         const id = '999999';
         const body: GraphQLRequest = {
             query: `
                 {
-                    buch(id: "${id}") {
-                        titel {
-                            titel
+                    auto(id: "${id}") {
+                        motor {
+                            name
                         }
                     }
                 }
@@ -126,7 +119,7 @@ describe('GraphQL Queries', () => {
         // then
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.buch).toBeNull();
+        expect(data.data!.auto).toBeNull();
 
         const { errors } = data;
 
@@ -135,24 +128,24 @@ describe('GraphQL Queries', () => {
         const [error] = errors!;
         const { message, path, extensions } = error;
 
-        expect(message).toBe(`Es gibt kein Buch mit der ID ${id}.`);
+        expect(message).toBe(`Es gibt kein Auto mit der ID ${id}.`);
         expect(path).toBeDefined();
-        expect(path![0]).toBe('buch');
+        expect(path![0]).toBe('auto');
         expect(extensions).toBeDefined();
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
 
-    test.concurrent('Buch zu vorhandenem Titel', async () => {
+    test.concurrent('Auto zu vorhandenem Motornamen', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        titel: "${titelVorhanden}"
+                    autos(suchkriterien: {
+                        motor: "${motornameVorhanden}"
                     }) {
                         art
-                        titel {
-                            titel
+                        motor {
+                            name
                         }
                     }
                 }
@@ -169,26 +162,26 @@ describe('GraphQL Queries', () => {
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+        const { autos } = data.data! as { autos: AutoDTO[] };
 
-        expect(buecher).not.toHaveLength(0);
-        expect(buecher).toHaveLength(1);
+        expect(autos).not.toHaveLength(0);
+        expect(autos).toHaveLength(1);
 
-        const [buch] = buecher;
+        const [auto] = autos;
 
-        expect(buch!.titel?.titel).toBe(titelVorhanden);
+        expect(auto!.motor?.name).toBe(motornameVorhanden);
     });
 
-    test.concurrent('Buch zu vorhandenem Teil-Titel', async () => {
+    test.concurrent('Auto zu vorhandenem Teil-Motornamen', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        titel: "${teilTitelVorhanden}"
+                    autos(suchkriterien: {
+                        motor: "${teilMotornameVorhanden}"
                     }) {
-                        titel {
-                            titel
+                        motor {
+                            name
                         }
                     }
                 }
@@ -205,30 +198,30 @@ describe('GraphQL Queries', () => {
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+        const { autos } = data.data! as { autos: AutoDTO[] };
 
-        expect(buecher).not.toHaveLength(0);
+        expect(autos).not.toHaveLength(0);
 
-        buecher
-            .map((buch) => buch.titel)
-            .forEach((titel) =>
-                expect(titel?.titel?.toLowerCase()).toStrictEqual(
-                    expect.stringContaining(teilTitelVorhanden),
+        autos
+            .map((auto) => auto.motor)
+            .forEach((motor) =>
+                expect(motor?.name?.toLowerCase()).toStrictEqual(
+                    expect.stringContaining(teilMotornameVorhanden),
                 ),
             );
     });
 
-    test.concurrent('Buch zu nicht vorhandenem Titel', async () => {
+    test.concurrent('Auto zu nicht vorhandenem Motornamen', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        titel: "${teilTitelNichtVorhanden}"
+                    autos(suchkriterien: {
+                        motor: "${teilMotornameNichtVorhanden}"
                     }) {
                         art
-                        titel {
-                            titel
+                        motor {
+                            name
                         }
                     }
                 }
@@ -242,7 +235,7 @@ describe('GraphQL Queries', () => {
         // then
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.buecher).toBeNull();
+        expect(data.data!.autos).toBeNull();
 
         const { errors } = data;
 
@@ -251,24 +244,24 @@ describe('GraphQL Queries', () => {
         const [error] = errors!;
         const { message, path, extensions } = error;
 
-        expect(message).toMatch(/^Keine Buecher gefunden:/u);
+        expect(message).toMatch(/^Keine Autos gefunden:/u);
         expect(path).toBeDefined();
-        expect(path![0]).toBe('buecher');
+        expect(path![0]).toBe('autos');
         expect(extensions).toBeDefined();
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
 
-    test.concurrent('Buch zu vorhandener ISBN-Nummer', async () => {
+    test.concurrent('Auto zu vorhandener Fahrgestellnummer', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        isbn: "${isbnVorhanden}"
+                    autos(suchkriterien: {
+                        fahrgestellnummer: "${fahrgestellnummerVorhanden}"
                     }) {
-                        isbn
-                        titel {
-                            titel
+                        fahrgestellnummer
+                        motor {
+                            name
                         }
                     }
                 }
@@ -285,30 +278,29 @@ describe('GraphQL Queries', () => {
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+        const { autos } = data.data! as { autos: AutoDTO[] };
 
-        expect(buecher).not.toHaveLength(0);
-        expect(buecher).toHaveLength(1);
+        expect(autos).not.toHaveLength(0);
+        expect(autos).toHaveLength(1);
 
-        const [buch] = buecher;
-        const { isbn, titel } = buch!;
+        const [auto] = autos;
+        const { fahrgestellnummer, motor } = auto!;
 
-        expect(isbn).toBe(isbnVorhanden);
-        expect(titel?.titel).toBeDefined();
+        expect(fahrgestellnummer).toBe(fahrgestellnummerVorhanden);
+        expect(motor?.name).toBeDefined();
     });
 
-    test.concurrent('Buecher mit Mindest-"rating"', async () => {
+    test.concurrent('Autos mit Baujahr >= 2019', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        rating: ${ratingMin},
-                        titel: "${teilTitelVorhanden}"
+                    autos(suchkriterien: {
+                        baujahr: ${baujahrMin}
                     }) {
-                        rating
-                        titel {
-                            titel
+                        baujahr
+                        motor {
+                            name
                         }
                     }
                 }
@@ -326,30 +318,27 @@ describe('GraphQL Queries', () => {
 
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+        const { autos } = data.data! as { autos: AutoDTO[] };
 
-        expect(buecher).not.toHaveLength(0);
+        expect(autos).not.toHaveLength(0);
 
-        buecher.forEach((buch) => {
-            const { rating, titel } = buch;
+        autos.forEach((auto) => {
+            const { baujahr } = auto;
 
-            expect(rating).toBeGreaterThanOrEqual(ratingMin);
-            expect(titel?.titel?.toLowerCase()).toStrictEqual(
-                expect.stringContaining(teilTitelVorhanden),
-            );
+            expect(baujahr).toBeGreaterThanOrEqual(baujahrMin);
         });
     });
 
-    test.concurrent('Kein Buch zu nicht-vorhandenem "rating"', async () => {
+    test.concurrent('Kein Auto zu nicht-vorhandenem "baujahr"', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        rating: ${ratingNichtVorhanden}
+                    autos(suchkriterien: {
+                        baujahr: ${baujahrNichtVorhanden}
                     }) {
-                        titel {
-                            titel
+                        motor {
+                            name
                         }
                     }
                 }
@@ -363,7 +352,7 @@ describe('GraphQL Queries', () => {
         // then
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.buecher).toBeNull();
+        expect(data.data!.autos).toBeNull();
 
         const { errors } = data;
 
@@ -372,25 +361,25 @@ describe('GraphQL Queries', () => {
         const [error] = errors!;
         const { message, path, extensions } = error;
 
-        expect(message).toMatch(/^Keine Buecher gefunden:/u);
+        expect(message).toMatch(/^Keine Autos gefunden:/u);
         expect(path).toBeDefined();
-        expect(path![0]).toBe('buecher');
+        expect(path![0]).toBe('autos');
         expect(extensions).toBeDefined();
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
 
-    test.concurrent('Buecher zur Art "EPUB"', async () => {
+    test.concurrent('Autos zur Art "LKW"', async () => {
         // given
-        const buchArt: BuchArt = 'EPUB';
+        const autoArt: AutoArt = 'LKW';
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        art: ${buchArt}
+                    autos(suchkriterien: {
+                        art: ${autoArt}
                     }) {
                         art
-                        titel {
-                            titel
+                        motor {
+                            name
                         }
                     }
                 }
@@ -407,29 +396,29 @@ describe('GraphQL Queries', () => {
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+        const { autos } = data.data! as { autos: AutoDTO[] };
 
-        expect(buecher).not.toHaveLength(0);
+        expect(autos).not.toHaveLength(0);
 
-        buecher.forEach((buch) => {
-            const { art, titel } = buch;
+        autos.forEach((auto) => {
+            const { art, motor } = auto;
 
-            expect(art).toBe(buchArt);
-            expect(titel?.titel).toBeDefined();
+            expect(art).toBe(autoArt);
+            expect(motor?.name).toBeDefined();
         });
     });
 
-    test.concurrent('Buecher zur einer ungueltigen Art', async () => {
+    test.concurrent('Autos zur einer ungueltigen Art', async () => {
         // given
-        const buchArt = 'UNGUELTIG';
+        const autoArt = 'UNGUELTIG';
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        art: ${buchArt}
+                    autos(suchkriterien: {
+                        art: ${autoArt}
                     }) {
-                        titel {
-                            titel
+                        motor {
+                            name
                         }
                     }
                 }
@@ -454,45 +443,6 @@ describe('GraphQL Queries', () => {
 
         expect(extensions).toBeDefined();
         expect(extensions!.code).toBe('GRAPHQL_VALIDATION_FAILED');
-    });
-
-    test.concurrent('Buecher mit lieferbar=true', async () => {
-        // given
-        const body: GraphQLRequest = {
-            query: `
-                {
-                    buecher(suchkriterien: {
-                        lieferbar: true
-                    }) {
-                        lieferbar
-                        titel {
-                            titel
-                        }
-                    }
-                }
-            `,
-        };
-
-        // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
-
-        // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.errors).toBeUndefined();
-        expect(data.data).toBeDefined();
-
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
-
-        expect(buecher).not.toHaveLength(0);
-
-        buecher.forEach((buch) => {
-            const { lieferbar, titel } = buch;
-
-            expect(lieferbar).toBe(true);
-            expect(titel?.titel).toBeDefined();
-        });
     });
 });
 

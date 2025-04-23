@@ -13,8 +13,8 @@ import { DecimalTransformer } from './decimal-transformer.js';
 export class Motor {
     @PrimaryGeneratedColumn()
     id: number | undefined;
-    @Column()
-    readonly name!: string;
+    @Column('varchar')
+    readonly name: string | undefined;
 
     @Column('int')
     readonly ps: number | undefined;

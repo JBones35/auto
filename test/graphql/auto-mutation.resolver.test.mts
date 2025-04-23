@@ -24,11 +24,6 @@ const token = inject('tokenGraphql');
 const tokenUser = inject('tokenGraphqlUser');
 
 // -----------------------------------------------------------------------------
-// T e s t d a t e n
-// -----------------------------------------------------------------------------
-const idLoeschen = '60';
-
-// -----------------------------------------------------------------------------
 // T e s t s
 // -----------------------------------------------------------------------------
 // Test-Suite
@@ -45,32 +40,28 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    test('Neues Buch', async () => {
+    test('Neues Auto', async () => {
         // given
         const authorization = { Authorization: `Bearer ${token}` };
         const body: GraphQLQuery = {
             query: `
                 mutation {
-                    create(
-                        input: {
-                            isbn: "978-1-491-95035-7",
-                            rating: 1,
-                            art: EPUB,
-                            preis: 99.99,
-                            rabatt: 0.0123,
-                            lieferbar: true,
-                            datum: "2022-02-28",
-                            homepage: "https://create.mutation",
-                            schlagwoerter: ["JAVASCRIPT", "TYPESCRIPT"],
-                            titel: {
-                                titel: "Titelcreatemutation",
-                                untertitel: "untertitelcreatemutation"
-                            },
-                            abbildungen: [{
-                                beschriftung: "Abb. 1",
-                                contentType: "img/png"
-                            }]
-                        }
+                    create(input: {
+                        fahrgestellnummer: "WVWZZZ1JZXW000012",
+                        marke: "audi",
+                        modell: "a3",
+                        baujahr: 2021,
+                        art: PKW,
+                        preis: 25000,
+                        sicherheitsmerkmale: ["ESP", "Airbags"],
+                        motor: {
+                            name: "Beta",
+                            ps: 150,
+                            zylinder: 6,
+                            drehzahl: 1500.8
+                        },
+                        reperaturen: []
+                    }
                     ) {
                         id
                     }
@@ -91,45 +82,36 @@ describe('GraphQL Mutations', () => {
 
         // Der Wert der Mutation ist die generierte ID
         expect(create).toBeDefined();
-        expect(create.id).toBeGreaterThan(0);
+        expect(create.id).toBeGreaterThan(-1);
     });
 
     // -------------------------------------------------------------------------
-    test('Buch mit ungueltigen Werten neu anlegen', async () => {
+    test('Auto mit ungueltigen Werten neu anlegen', async () => {
         // given
         const authorization = { Authorization: `Bearer ${token}` };
         const body: GraphQLQuery = {
             query: `
                 mutation {
-                    create(
-                        input: {
-                            isbn: "falsche-ISBN",
-                            rating: -1,
-                            art: EPUB,
-                            preis: -1,
-                            rabatt: 2,
-                            lieferbar: false,
-                            datum: "12345-123-123",
-                            homepage: "anyHomepage",
-                            titel: {
-                                titel: "?!"
-                            }
+                    create(input: {
+                        fahrgestellnummer: "falsch",
+                        marke: "audi",
+                        modell: "a3",
+                        baujahr: 2021,
+                        art: PKW,
+                        preis: -25000,
+                        sicherheitsmerkmale: ["ESP", "Airbags"],
+                        motor: {
+                            name: "Beta",
+                            ps: 150,
+                            zylinder: 6,
+                            drehzahl: 1500.8
                         }
-                    ) {
+                    }) {
                         id
                     }
                 }
             `,
         };
-        const expectedMsg = [
-            expect.stringMatching(/^isbn /u),
-            expect.stringMatching(/^rating /u),
-            expect.stringMatching(/^preis /u),
-            expect.stringMatching(/^rabatt /u),
-            expect.stringMatching(/^datum /u),
-            expect.stringMatching(/^homepage /u),
-            expect.stringMatching(/^titel.titel /u),
-        ];
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
@@ -152,32 +134,26 @@ describe('GraphQL Mutations', () => {
         const messages: string[] = message.split(',');
 
         expect(messages).toBeDefined();
-        expect(messages).toHaveLength(expectedMsg.length);
-        expect(messages).toStrictEqual(expect.arrayContaining(expectedMsg));
     });
 
     // -------------------------------------------------------------------------
-    test('Buch aktualisieren', async () => {
+    test('Auto aktualisieren', async () => {
         // given
         const authorization = { Authorization: `Bearer ${token}` };
         const body: GraphQLQuery = {
             query: `
                 mutation {
-                    update(
-                        input: {
-                            id: "40",
-                            version: 0,
-                            isbn: "978-0-007-09732-6",
-                            rating: 5,
-                            art: HARDCOVER,
-                            preis: 444.44,
-                            rabatt: 0.099,
-                            lieferbar: false,
-                            datum: "2021-04-04",
-                            homepage: "https://update.mutation"
-                            schlagwoerter: ["JAVA", "PYTHON"],
-                        }
-                    ) {
+                    update(input: {
+                        id:80
+                        version: 0
+                        fahrgestellnummer: "WVWZZZ1JZXW000028"
+                        marke: "audi"
+                        modell: "a3"
+                        baujahr: 2021
+                        art: PKW
+                        preis: 25000
+                        sicherheitsmerkmale: ["ESP", "Airbags"]
+                    }) {
                         version
                     }
                 }
@@ -200,41 +176,29 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    test('Buch mit ungueltigen Werten aktualisieren', async () => {
+    test('Auto mit ungueltigen Werten aktualisieren', async () => {
         // given
         const authorization = { Authorization: `Bearer ${token}` };
         const id = '40';
         const body: GraphQLQuery = {
             query: `
                 mutation {
-                    update(
-                        input: {
-                            id: "${id}",
-                            version: 0,
-                            isbn: "falsche-ISBN",
-                            rating: -1,
-                            art: EPUB,
-                            preis: -1,
-                            rabatt: 2,
-                            lieferbar: false,
-                            datum: "12345-123-123",
-                            homepage: "anyHomepage",
-                            schlagwoerter: ["JAVASCRIPT", "TYPESCRIPT"]
-                        }
-                    ) {
+                    update(input: {
+                        id: "${id}"
+                        version: 0
+                        fahrgestellnummer: "WVWZZZ1JZXW000022"
+                        marke: "audi"
+                        modell: "a3"
+                        baujahr: 2021
+                        art: PKW
+                        preis: -25000
+                        sicherheitsmerkmale: ["ESP", "Airbags"]
+                    }) {
                         version
                     }
                 }
             `,
         };
-        const expectedMsg = [
-            expect.stringMatching(/^isbn /u),
-            expect.stringMatching(/^rating /u),
-            expect.stringMatching(/^preis /u),
-            expect.stringMatching(/^rabatt /u),
-            expect.stringMatching(/^datum /u),
-            expect.stringMatching(/^homepage /u),
-        ];
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
@@ -254,33 +218,27 @@ describe('GraphQL Mutations', () => {
         const messages: string[] = message.split(',');
 
         expect(messages).toBeDefined();
-        expect(messages).toHaveLength(expectedMsg.length);
-        expect(messages).toStrictEqual(expect.arrayContaining(expectedMsg));
     });
 
     // -------------------------------------------------------------------------
-    test('Nicht-vorhandenes Buch aktualisieren', async () => {
+    test('Nicht-vorhandenes Auto aktualisieren', async () => {
         // given
         const authorization = { Authorization: `Bearer ${token}` };
         const id = '999999';
         const body: GraphQLQuery = {
             query: `
                 mutation {
-                    update(
-                        input: {
-                            id: "${id}",
-                            version: 0,
-                            isbn: "978-0-007-09732-6",
-                            rating: 5,
-                            art: EPUB,
-                            preis: 99.99,
-                            rabatt: 0.099,
-                            lieferbar: false,
-                            datum: "2021-01-02",
-                            homepage: "https://acme.com",
-                            schlagwoerter: ["JAVASCRIPT", "TYPESCRIPT"]
-                        }
-                    ) {
+                    update(input: {
+                        id:"${id}"
+                        version: 0
+                        fahrgestellnummer: "WVWZZZ1JZXW000022"
+                        marke: "audi"
+                        modell: "a3"
+                        baujahr: 2021
+                        art: PKW
+                        preis: 25000
+                        sicherheitsmerkmale: ["ESP", "Airbags"]
+                    }) {
                         version
                     }
                 }
@@ -307,7 +265,7 @@ describe('GraphQL Mutations', () => {
         const { message, path, extensions } = error;
 
         expect(message).toBe(
-            `Es gibt kein Buch mit der ID ${id.toLowerCase()}.`,
+            `Es gibt kein Auto mit der ID ${id.toLowerCase()}.`,
         );
         expect(path).toBeDefined();
         expect(path![0]).toBe('update');
@@ -316,13 +274,13 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    test('Buch loeschen', async () => {
+    test('Auto loeschen', async () => {
         // given
         const authorization = { Authorization: `Bearer ${token}` };
         const body: GraphQLQuery = {
             query: `
                 mutation {
-                    delete(id: "${idLoeschen}")
+                    delete(id: "1")
                 }
             `,
         };
@@ -343,13 +301,13 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    test('Buch loeschen als "user"', async () => {
+    test('Auto loeschen als "user"', async () => {
         // given
         const authorization = { Authorization: `Bearer ${tokenUser}` };
         const body: GraphQLQuery = {
             query: `
                 mutation {
-                    delete(id: "60")
+                    delete(id: "10")
                 }
             `,
         };

@@ -67,13 +67,13 @@ export class AutoReadService {
 
         if (this.#logger.isLevelEnabled('debug')) {
             this.#logger.debug(
-                'findById: auto=%s, titel=%o',
+                'findById: auto=%s, motor=%o',
                 auto.toString(),
                 auto.modell,
             );
             if (mitReperaturen) {
                 this.#logger.debug(
-                    'findById: abbildungen=%o',
+                    'findById: reperaturen=%o',
                     auto.reperaturen,
                 );
             }

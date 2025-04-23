@@ -30,13 +30,13 @@ export class Auto {
     @ApiProperty({ example: 'W0L000051T2123456', type: String })
     readonly fahrgestellnummer: string | undefined;
 
-    @Column()
+    @Column('varchar')
     @ApiProperty({ example: 'BMW', type: String })
-    readonly marke!: string;
+    readonly marke: string | undefined;
 
-    @Column()
+    @Column('varchar')
     @ApiProperty({ example: 'X5', type: String })
-    readonly modell!: string;
+    readonly modell: string | undefined;
 
     @Column('int')
     @ApiProperty({ example: 2021, type: Number })
@@ -54,7 +54,7 @@ export class Auto {
     })
     @ApiProperty({ example: 1, type: Number })
     // Decimal aus decimal.js analog zu BigDecimal von Java
-    readonly preis!: Decimal;
+    readonly preis: Decimal | undefined;
 
     @Column('simple-array')
     sicherheitsmerkmale: string[] | null | undefined;

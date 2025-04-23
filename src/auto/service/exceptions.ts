@@ -14,7 +14,7 @@ export class FahrgestellnummerExistsException extends HttpException {
 
     constructor(fahrgestellnummer: string | undefined) {
         super(
-            `Die ISBN-Nummer ${fahrgestellnummer} existiert bereits.`,
+            `Die Fahrgestellnummer ${fahrgestellnummer} existiert bereits.`,
             HttpStatus.UNPROCESSABLE_ENTITY,
         );
         this.fahrgestellnummer = fahrgestellnummer;

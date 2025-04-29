@@ -21,9 +21,6 @@ package mail {
 package auto {
   package entity {
     class Auto
-    class AutoFile
-    class Motor
-    class Reperatur
   }
 
   package service #DDDDDD {
@@ -32,9 +29,9 @@ package auto {
     class VersionOutdatedException
 
     class AutoWriteService <<control>> <<Injectable>> {
-      +create(auto: Auto): Promise
-      +update(id: number, auto: Auto, version: string): Promise
-      +delete(id: number): Promise
+      + async create(auto: Auto): Promise
+      + async update(id: number, auto: Auto, version: string): Promise
+      + async delete(id: number): Promise
     }
 
     AutoWriteService o--> AutoReadService : readService
@@ -46,9 +43,6 @@ package auto {
     AutoWriteService .up.> Promise
 
     AutoWriteService ..> Auto
-    AutoWriteService ..> AutoFile
-    AutoWriteService ..> Motor
-    AutoWriteService ..> Reperatur
 
     AutoWriteService .up.> FahrgestellnummerExistsException
     AutoWriteService .up.> VersionInvalidException
@@ -57,4 +51,5 @@ package auto {
 }
 
 hide empty members
+
 @enduml

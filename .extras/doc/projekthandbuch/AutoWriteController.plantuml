@@ -64,8 +64,6 @@ package express {
 package auto {
   package entity #FFFFFF {
     class Auto <<entity>>
-    class Motor <<entity>>
-    class Reperatur <<entity>>
 
     Auto .[hidden].> Promise
     Auto .[hidden].> Request
@@ -73,21 +71,20 @@ package auto {
 
   package service {
     class AutoWriteService << control >>
+    class AutoReadService << control >>
   }
 
   package rest #DDDDDD {
     class AutoWriteController << control >> << @Controller() >> << @UseGuards() >> << @UseInterceptors() >> {
       + @Post() @Roles() async post(@Body() auto: Auto, @Req() req: Request,  @Res() res: Response): Promise<Response>
-      + @Post(':id') @Public() async addFile(@Param() id: number, @UploadedFile() file, @Req() req, @Res() res): Promise<Response>
       + @Put(':id') @Roles() async put(@Body() auto, @Param() id: number, @Headers() version: string, @Res() res: Response): Promise<Response>
       + @Delete(':id') @Roles() async delete(@Param() id: number): Promise<void>
     }
 
     AutoWriteController o--> "1" AutoWriteService : service
+    AutoWriteController o--> "1" AutoReadService : readService
     AutoWriteController ..up> Auto
-    AutoWriteController ..> Motor
-    AutoWriteController ..> Reperatur
-
+    
     AutoWriteController ..> Controller
 
     AutoWriteController .up.> AuthGuard
@@ -104,7 +101,5 @@ package auto {
 }
 
 hide empty members
-
-footer (c) Jürgen Zimmermann
 
 @enduml

@@ -48,6 +48,4 @@ package auto {
 
 hide empty members
 
-footer (c) Jürgen Zimmermann
-
 @enduml

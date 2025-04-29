@@ -47,7 +47,6 @@ package auto {
     class AutoGetController <<control>> <<@Controller()>> <<@UseInterceptors()>> {
       + @Get(':id') async getById(id: number, req: Request, version: string, res: Response): Promise<Response<Auto | undefined>>
       + @Get() async get(query: AutoQuery, req: Request, res: Response): Promise<Response<Auto[] | undefined>>
-      + @Get('/file/:id') async getFileById(id: number, res: Response): Promise<StreamableFile>
     }
 
     AutoGetController o--> "1" AutoReadService : service
@@ -66,7 +65,5 @@ package auto {
 }
 
 hide empty members
-
-footer (c) Jürgen Zimmermann
 
 @enduml

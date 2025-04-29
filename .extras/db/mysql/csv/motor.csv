@@ -1,4 +1,4 @@
-id;name;ps;zylinder;drehzahl;buch_id
+id;name;ps;zylinder;drehzahl;auto_id
 1;Alpha;100;4;1000.5;1
 20;Beta;150;6;3000.7;20
 30;Gamma;325;7;13123.1;30

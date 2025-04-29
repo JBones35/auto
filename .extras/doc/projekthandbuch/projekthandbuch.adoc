@@ -1,4 +1,4 @@
-= ProjekthandAuto
+= Projekthandbuch
 Jonas, David, Philipp, Julius
 :doctype: book
 :toc: left

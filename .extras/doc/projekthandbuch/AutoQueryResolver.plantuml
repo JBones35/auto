@@ -1,0 +1,53 @@
+@startuml Controller-Klasse
+
+interface Promise<T>
+
+package @nestjs/graphql {
+  class "@Resolver" as Resolver
+  hide Resolver circle
+
+  class "@UseInterceptors" as UseInterceptors
+  hide UseInterceptors circle
+
+  class "@Query" as Query
+  hide Query circle
+
+  class "@Args" as Args
+  hide Args circle
+
+  Resolver .left[hidden].> Promise
+}
+
+package auto {
+  package entity {
+    class Auto <<entity>>
+  }
+
+  package service {
+    class AutoReadService << control >>
+    class Suchkriterien
+  }
+
+  package graphql #DDDDDD {
+    class "type IdInput = { id: number }" as IdInput
+    class "type SuchkriterienInput = { suchkriterien: Suchkriterien }" as SuchkriterienInput
+    class AutoQueryResolver << control >> << @Resolver() >> << @UseInterceptors() >> {
+      + @Query() async findById(@Args() id: IdInput): Promise<Auto>
+      + @Query() async find(@Args() suchkriterien: SuchkriterienInput): Promise<Auto[]>
+    }
+
+    AutoQueryResolver o--> "1" AutoReadService : service
+    AutoQueryResolver ..> Auto
+    AutoQueryResolver ..> IdInput
+    AutoQueryResolver ..> SuchkriterienInput
+    SuchkriterienInput ..> Suchkriterien
+    AutoQueryResolver ..> Resolver
+    AutoQueryResolver ..> Promise
+  }
+}
+
+hide empty members
+
+footer (c) Jürgen Zimmermann
+
+@enduml

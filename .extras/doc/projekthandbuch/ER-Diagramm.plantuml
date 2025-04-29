@@ -1,64 +1,46 @@
-' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
-'
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-'
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-'
-' You should have received a copy of the GNU General Public License
-' along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-' Preview durch <Alt>d
-
 @startuml ER Diagramm
 
 ' hide the spot
 hide circle
 
-' evtl. Prbleme mit Kraehenfuessen vermeiden
+' Probleme mit Krähenfüßen vermeiden
 skinparam linetype ortho
 
-entity "Buch" {
+entity "Auto" {
   * id: integer <<generated>>
   --
   * version: integer
-  * isbn: text
-  * rating: number
-  * art: text
-  * preis: number
-  * rabatt: number
-  * lieferbar: boolean
-    datum: date
-    homepage: text
-  * **titel_id**: integer <<FK>>
-    schlagwoerter: text
+  * fahrgestellnummer: varchar
+  * marke: varchar
+  * modell: varchar
+  * baujahr: integer
+  * art: varchar
+  * preis: decimal(8,2)
+    sicherheitsmerkmale: text[]
   * erzeugt: timestamp
   * aktualisiert: timestamp
 }
 
-entity "Titel" {
+entity "Motor" {
   * id: integer <<generated>>
   --
-  * titel: text
-    untertitel: text
+  * name: text
+  * ps: integer
+  * zylinder: integer
+  * drehzahl: decimal(4,3)
+  * **auto_id**: integer <<FK>>
 }
 
-entity "Abbildung" {
+entity "Reperatur" {
   * id: integer <<generated>>
   --
-  * beschriftung: text
-    contentType: text
-  * **buch_id**: integer <<FK>>
+  * kosten: decimal(4,3)
+  * mechaniker: text
+  * datum: date
+  * **auto_id**: integer <<FK>>
 }
 
-Buch ||..|| Titel
-Buch ||..o{ Abbildung
-
-footer (c) Jürgen Zimmermann
+Auto ||--|| Motor : besitzt >
+Auto ||--o{ Reperatur : hat >
 
 @enduml

@@ -1,0 +1,110 @@
+@startuml Controller-Klasse
+
+interface Promise<T>
+
+package @nestjs/common {
+  class "@Controller" as Controller
+  hide Controller circle
+
+  class "@UseGuards" as UseGuards
+  hide UseGuards circle
+
+  class "@UseInterceptors" as UseInterceptors
+  hide UseInterceptors circle
+
+  class "@Post" as Post
+  hide Post circle
+
+  class "@Put" as Put
+  hide Put circle
+
+  class "@Delete" as Delete
+  hide Delete circle
+
+  class "@Req" as Req
+  hide Req circle
+
+  class "@Res" as Res
+  hide Res circle
+
+  class "@Param" as Param
+  hide Param circle
+
+  class "@Body" as Body
+  hide Body circle
+
+  class "@Headers" as Headers
+  hide Headers circle
+
+  UseInterceptors .[hidden].> Post
+  UseInterceptors .[hidden].> Put
+  UseInterceptors .[hidden].> Delete
+
+  Post .[hidden].> Req
+  Post .[hidden].> Res
+  Post .[hidden].> Param
+  Post .[hidden].> Body
+  Post .[hidden].> Headers
+}
+
+package nest-keycloak-connect {
+  class AuthGuard
+
+  class "@Roles" as Roles
+  hide Roles circle
+}
+
+package express {
+  class Request
+  class Response
+
+  Response .right[hidden].> Controller
+}
+
+package auto {
+  package entity #FFFFFF {
+    class Auto <<entity>>
+    class Motor <<entity>>
+    class Reperatur <<entity>>
+
+    Auto .[hidden].> Promise
+    Auto .[hidden].> Request
+  }
+
+  package service {
+    class AutoWriteService << control >>
+  }
+
+  package rest #DDDDDD {
+    class AutoWriteController << control >> << @Controller() >> << @UseGuards() >> << @UseInterceptors() >> {
+      + @Post() @Roles() async post(@Body() auto: Auto, @Req() req: Request,  @Res() res: Response): Promise<Response>
+      + @Post(':id') @Public() async addFile(@Param() id: number, @UploadedFile() file, @Req() req, @Res() res): Promise<Response>
+      + @Put(':id') @Roles() async put(@Body() auto, @Param() id: number, @Headers() version: string, @Res() res: Response): Promise<Response>
+      + @Delete(':id') @Roles() async delete(@Param() id: number): Promise<void>
+    }
+
+    AutoWriteController o--> "1" AutoWriteService : service
+    AutoWriteController ..up> Auto
+    AutoWriteController ..> Motor
+    AutoWriteController ..> Reperatur
+
+    AutoWriteController ..> Controller
+
+    AutoWriteController .up.> AuthGuard
+    AutoWriteController .up.> Roles
+
+    AutoWriteController ..> Request
+    AutoWriteController ..> Response
+    AutoWriteController ..> Promise
+
+    Auto .up[hidden].> Roles
+    AutoWriteService .[hidden].> Request
+    AutoWriteService .[hidden].> Promise
+  }
+}
+
+hide empty members
+
+footer (c) Jürgen Zimmermann
+
+@enduml

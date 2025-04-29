@@ -1,0 +1,68 @@
+@startuml Entity
+
+package typeorm {
+  class "@Entity" as Entity
+  hide Entity circle
+  class "@Column" as Column
+  hide Column circle
+  class "@PrimaryGeneratedColumn" as PrimaryGeneratedColumn
+  hide PrimaryGeneratedColumn circle
+  class "@VersionColumn" as VersionColumn
+  hide VersionColumn circle
+  class "@OneToMany" as OneToMany
+  hide OneToMany circle
+  class "@OneToOne" as OneToOne
+  hide OneToOne circle
+  class "@JoinColumn" as JoinColumn
+  hide JoinColumn circle
+  class "@CreateDateColumn" as CreateDateColumn
+  hide CreateDateColumn circle
+  class "@UpdateDateColumn" as UpdateDateColumn
+  hide UpdateDateColumn circle
+}
+
+package auto.entity {
+  class "type AutoArt = 'PKW' | 'LKW'" as AutoArt
+  hide AutoArt circle
+
+  class Auto <<entity>> <<@Entity>> {
+    +@PrimaryGeneratedColumn() id: number
+    +@VersionColumn() version: number
+    +@Column() fahrgestellnummer: string
+    +@Column() marke: string
+    +@Column() modell: string
+    +@Column() baujahr: number
+    +@Column() art: AutoArt
+    +@Column() preis: Decimal
+    +@Column() sicherheitsmerkmale: string[]
+    +@CreateDateColumn() erzeugt: Date
+    +@UpdateDateColumn() aktualisiert: Date
+  }
+
+  class Motor <<entity>> <<@Entity>> {
+    +@PrimaryGeneratedColumn() id: number
+    +@Column() name: string
+    +@Column() ps: number
+    +@Column() zylinder: number
+    +@Column() drehzahl: Decimal
+  }
+
+  class Reperatur <<entity>> <<@Entity>> {
+    +@PrimaryGeneratedColumn() id: number
+    +@Column() kosten: Decimal
+    +@Column() mechaniker: string
+    +@Column() datum: Date
+  }
+  
+  Auto *-- "1" Motor : @OneToOne()\nmotor
+  Auto *-- "*" Reperatur : @OneToMany()\nreperaturen
+
+  Auto .right.> Entity
+  Auto .right.> AutoArt
+}
+
+hide empty members
+
+footer (c) Jürgen Zimmermann
+
+@enduml

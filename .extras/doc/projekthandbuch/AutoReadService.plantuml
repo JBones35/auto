@@ -1,0 +1,54 @@
+@startuml Anwendungskern
+
+' --- Promise Interface
+interface Promise
+
+' --- NestJS common package
+package nestjs_common {
+  class Injectable <<stereotype>>
+}
+
+' --- TypeORM
+package typeorm {
+  class Repository
+}
+
+' --- NestJS TypeORM
+package nestjs_typeorm {
+  class InjectRepository <<stereotype>>
+}
+
+' --- Auto Domain
+package auto {
+  package entity {
+    class Auto
+  }
+
+  package service #DDDDDD {
+    class QueryBuilder
+    class Pageable
+    class Slice
+    class Suchkriterien
+
+    class AutoReadService <<control>> <<Injectable>> {
+      +findById(id: number): Promise
+      +find(suchkriterien: Suchkriterien, pageable: Pageable): Promise
+      +findFileByAutoId(autoId: number): Promise
+    }
+
+    AutoReadService o--> QueryBuilder : queryBuilder
+    AutoReadService o--> Repository : @InjectRepository repo
+
+    AutoReadService .up.> Injectable
+    AutoReadService .up.> InjectRepository
+
+    AutoReadService .up.> Promise
+    AutoReadService ..> Auto
+    AutoReadService ..> Pageable
+    AutoReadService ..> Suchkriterien
+    AutoReadService ..> Slice
+  }
+}
+
+hide empty members
+@enduml

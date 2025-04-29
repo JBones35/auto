@@ -1,22 +1,5 @@
-// Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-// Preview durch <Strg><Shift>v
-
-= Projekthandbuch
-Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
+= ProjekthandAuto
+Jonas, David, Philipp, Julius
 :doctype: book
 :toc: left
 :sectanchors:
@@ -24,15 +7,8 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 :sectnums:
 :source-highlighter: highlight.js
 :icons: font
-// :kroki-server-url: https://kroki.io
 
-// https://github.com/asciidoctor/asciidoctorj
-// https://github.com/asciidoctor/asciidoctor-diagram
-// http://de.plantuml.com/classes.html
-// http://de.plantuml.com/component.html
-// https://github.com/odrotbohm/asciidoctor-plantuml
-
-IMPORTANT: Copyright (C) 2020 - present Jürgen Zimmermann, Hochschule Karlsruhe. +
+IMPORTANT: Copyright (C) 2020 - present Jonas, David, Philipp, Julius, Hochschule Karlsruhe. +
            Free use of this software is granted under the terms of the
            GNU General Public License (GPL) v3. +
            For the full text of the license, see the http://www.gnu.org/licenses/gpl-3.0.html[license] file.
@@ -41,7 +17,7 @@ IMPORTANT: Copyright (C) 2020 - present Jürgen Zimmermann, Hochschule Karlsruhe
 
 === Der Applikationsserver im Überblick
 
-Sed porttitor lectus nibh. Nulla porttitor accumsan tincidunt.
+Ein kurzer Überblick über die Architektur und Hauptfunktionen des Applikationsservers.
 
 .Use Cases
 [plantuml,use-cases,svg]
@@ -49,8 +25,7 @@ Sed porttitor lectus nibh. Nulla porttitor accumsan tincidunt.
 include::use-cases.plantuml[]
 ----
 
-Quisque velit nisi, pretium ut lacinia in, elementum id enim. Nulla porttitor
-accumsan tincidunt.
+Beschreibung der wichtigsten Anwendungsfälle und Systemprozesse.
 
 .Komponentendiagramm
 [plantuml,komponenten,svg]
@@ -58,22 +33,19 @@ accumsan tincidunt.
 include::komponenten.plantuml[]
 ----
 
+Darstellung der wichtigsten Softwarekomponenten und ihrer Beziehungen.
+
 === Die REST-Schnittstelle
 
-Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
-Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet
-ligula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
-cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit
-amet ligula.
+Übersicht über die bereitgestellten REST-Endpunkte des Systems.
 
-."BuchGetController" für Lesezugriffe an der REST-Schnittstelle
-[plantuml,BuchGetController,svg]
+."AutoGetController" für Lesezugriffe an der REST-Schnittstelle
+[plantuml,AutoGetController,svg]
 ----
-include::BuchGetController.plantuml[]
+include::AutoGetController.plantuml[]
 ----
 
-Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec
-sollicitudin molestie malesuada.
+Beschreibung der Controller für Leseoperationen.
 
 ."Sequenzdiagramm" mit den Methodenaufrufen
 [plantuml,sequenzdiagramm,svg]
@@ -81,91 +53,74 @@ sollicitudin molestie malesuada.
 include::sequenzdiagramm.plantuml[]
 ----
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-tempor invidunt ut.
+Darstellung der Abläufe und Aufrufe zwischen den Komponenten.
 
-."BuchWriteController" für Schreibzugriffe an der REST-Schnittstelle
-[plantuml,BuchGetController,svg]
+."AutoWriteController" für Schreibzugriffe an der REST-Schnittstelle
+[plantuml,AutoWriteController,svg]
 ----
-include::BuchWriteController.plantuml[]
+include::AutoWriteController.plantuml[]
 ----
+
+Beschreibung der Controller für Schreiboperationen.
 
 === Die GraphQL-Schnittstelle
 
-Donec sollicitudin molestie malesuada. Donec rutrum congue leo eget malesuada.
+Überblick über die Funktionen und Möglichkeiten der GraphQL-Schnittstelle.
 
-.BuchQueryResolver für Lesezugriffe an der GraphQL-Schnittstelle
-[plantuml,BuchQueryResolver,svg]
+.AutoQueryResolver für Lesezugriffe an der GraphQL-Schnittstelle
+[plantuml,AutoQueryResolver,svg]
 ----
-include::BuchQueryResolver.plantuml[]
+include::AutoQueryResolver.plantuml[]
 ----
 
-Donec sollicitudin molestie malesuada. Praesent sapien massa, convallis a
-pellentesque nec, egestas non nisi.
+GraphQL-Resolver für Leseoperationen.
 
-.BuchMutationResolver für Schreibzugriffe an der GraphQL-Schnittstelle
-[plantuml,BuchMutationResolver,svg]
+.AutoMutationResolver für Schreibzugriffe an der GraphQL-Schnittstelle
+[plantuml,AutoMutationResolver,svg]
 ----
-include::BuchMutationResolver.plantuml[]
+include::AutoMutationResolver.plantuml[]
 ----
+
+GraphQL-Resolver für Schreiboperationen.
 
 === Die Geschäftslogik
 
-Donec rutrum congue leo eget malesuada. Donec rutrum congue leo eget malesuada.
+Beschreibung der Geschäftslogik und der wichtigsten Services.
 
-."BuchReadService" von der Geschäftslogik
-[plantuml,BuchReadService,svg]
+."AutoReadService" von der Geschäftslogik
+[plantuml,AutoReadService,svg]
 ----
-include::BuchReadService.plantuml[]
+include::AutoReadService.plantuml[]
 ----
 
-Pellentesque in ipsum id orci porta dapibus. Donec rutrum congue leo eget
-malesuada.
+Service für Lesevorgänge innerhalb der Geschäftslogik.
 
-."BuchWriteService" von der Geschäftslogik
-[plantuml,BuchWriteService,svg]
+."AutoWriteService" von der Geschäftslogik
+[plantuml,AutoWriteService,svg]
 ----
-include::BuchWriteService.plantuml[]
+include::AutoWriteService.plantuml[]
 ----
+
+Service für Schreibvorgänge innerhalb der Geschäftslogik.
 
 === Klasse für Entities
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur arcu erat,
-accumsan id imperdiet et, porttitor at sem.
+Beschreibung der verwendeten Entity-Klassen und deren Struktur.
 
 .Entity
-[plantuml,Buch,svg]
+[plantuml,Auto,svg]
 ----
-include::Buch.plantuml[]
+include::Auto.plantuml[]
 ----
+
+Darstellung der Auto-Entity mit Attributen und Beziehungen.
 
 === ER-Diagramm
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Visuelle Darstellung der Datenbankstruktur und der Beziehungen zwischen den Entitäten.
 
 .ER-Diagramm
 [plantuml,ER-Diagramm,svg]
 ----
 include::ER-Diagramm.plantuml[]
 ----
-
-== Programmierrichtlinien für TypeScript und JavaScript
-
-Für die Programmierung mit *TypeScript* und *JavaScript* sind folgende
-Styleguides empfehlenswert:
-
-[horizontal]
-_E-Book zu TypeScript_:: https://github.com/gibbok/typescript-book
-_Google_:: https://google.github.io/styleguide/tsguide.html
-_Airbnb_:: https://github.com/airbnb/javascript
-_Shopify_:: https://github.com/Shopify/javascript
-_React bei Airbnb_:: https://github.com/airbnb/javascript/tree/master/react
-_Angular_:: https://angular.io/docs/ts/latest/guide/style-guide.html
-_Microsoft_:: https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines
-
-Von IBM und Red Hat gibt es bei GitHub _Node.js Reference Architecture_
-https://github.com/nodeshift/nodejs-reference-architecture, wo alle möglichen
-Aspekte bei der Softwareentwicklung mit Node berücksichtigt sind und
-entsprechende Empfehlungen bzw. Best Practices beschrieben sind.
-Diese Dokumentation muss man einfach gelesen haben. Ebenfalls empfehlenswert
-ist https://github.com/goldbergyoni/nodebestpractices.

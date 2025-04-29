@@ -1,0 +1,70 @@
+@startuml Controller-Klasse
+
+interface Promise<T>
+
+package @nestjs/graphql {
+  class "@Resolver" as Resolver
+  hide Resolver circle
+
+  class "@UseGuards" as UseGuards
+  hide UseGuards circle
+
+  class "@UseInterceptors" as UseInterceptors
+  hide UseInterceptors circle
+
+  class "@Mutation" as Mutation
+  hide Mutation circle
+
+  class "@Args" as Args
+  hide Args circle
+}
+
+package nest-keycloak-connect {
+  class AuthGuard
+  class "@Roles" as Roles
+  hide Roles circle
+}
+
+package auto #DDDDDD {
+  package entity #FFFFFF {
+    class Auto <<entity>>
+  }
+
+  package service #FFFFFF {
+    class AutoWriteService << control >>
+  }
+
+  class "type AutoDTO" as AutoDTO
+  class "type AutoUpdateDTO" as AutoUpdateDTO
+  class "type CreatePayload" as CreatePayload
+  class "type UpdatePayload" as UpdatePayload
+  class "type IdInput" as IdInput
+
+  class AutoMutationResolver << control >> << @Resolver() >> << @UseGuards() >> << @UseInterceptors() >> {
+    + @Mutation() @Roles() async create(@Args() input: AutoDTO): Promise<CreatePayload>
+    + @Mutation() @Roles() async update(@Args() input: AutoUpdateDTO): Promise<UpdatePayload>
+    + @Mutation() @Roles() async delete(@Args() id: IdInput): Promise<boolean>
+  }
+
+  AutoMutationResolver o-down-> "1" AutoWriteService : service
+
+  AutoMutationResolver ..> AutoDTO
+  AutoMutationResolver ..> AutoUpdateDTO
+  AutoMutationResolver ..> CreatePayload
+  AutoMutationResolver ..> UpdatePayload
+  AutoMutationResolver ..> IdInput
+  AutoMutationResolver ..> Auto
+  AutoMutationResolver ..> Promise
+  AutoMutationResolver ..> Resolver
+  AutoMutationResolver .up.> AuthGuard
+  AutoMutationResolver .up.> Roles
+
+  AutoDTO .up.> Auto
+  AutoUpdateDTO .up.> AutoDTO
+}
+
+hide empty members
+
+footer (c) Jürgen Zimmermann
+
+@enduml

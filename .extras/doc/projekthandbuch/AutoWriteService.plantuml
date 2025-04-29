@@ -1,0 +1,60 @@
+@startuml Anwendungskern
+
+interface Promise
+
+package nestjs_common {
+  class Injectable <<stereotype>>
+}
+
+package typeorm {
+  class Repository
+}
+
+package nestjs_typeorm {
+  class InjectRepository <<stereotype>>
+}
+
+package mail {
+  class MailService
+}
+
+package auto {
+  package entity {
+    class Auto
+    class AutoFile
+    class Motor
+    class Reperatur
+  }
+
+  package service #DDDDDD {
+    class FahrgestellnummerExistsException
+    class VersionInvalidException
+    class VersionOutdatedException
+
+    class AutoWriteService <<control>> <<Injectable>> {
+      +create(auto: Auto): Promise
+      +update(id: number, auto: Auto, version: string): Promise
+      +delete(id: number): Promise
+    }
+
+    AutoWriteService o--> AutoReadService : readService
+    AutoWriteService o--> Repository : autoRepository
+    AutoWriteService o--> MailService : mailService
+
+    AutoWriteService .up.> Injectable
+    AutoWriteService .up.> InjectRepository
+    AutoWriteService .up.> Promise
+
+    AutoWriteService ..> Auto
+    AutoWriteService ..> AutoFile
+    AutoWriteService ..> Motor
+    AutoWriteService ..> Reperatur
+
+    AutoWriteService .up.> FahrgestellnummerExistsException
+    AutoWriteService .up.> VersionInvalidException
+    AutoWriteService .up.> VersionOutdatedException
+  }
+}
+
+hide empty members
+@enduml

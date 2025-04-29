@@ -26,14 +26,10 @@ package auto {
 
   package service #DDDDDD {
     class QueryBuilder
-    class Pageable
-    class Slice
-    class Suchkriterien
 
     class AutoReadService <<control>> <<Injectable>> {
-      +findById(id: number): Promise
-      +find(suchkriterien: Suchkriterien, pageable: Pageable): Promise
-      +findFileByAutoId(autoId: number): Promise
+      + async findById(id: number): Promise
+      + async find(suchkriterien?: Record<string, any>): Promise<Auto[]>
     }
 
     AutoReadService o--> QueryBuilder : queryBuilder
@@ -44,11 +40,10 @@ package auto {
 
     AutoReadService .up.> Promise
     AutoReadService ..> Auto
-    AutoReadService ..> Pageable
-    AutoReadService ..> Suchkriterien
-    AutoReadService ..> Slice
+
   }
 }
 
 hide empty members
+
 @enduml

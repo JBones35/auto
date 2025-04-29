@@ -36,9 +36,11 @@ package auto #DDDDDD {
 
   class "type AutoDTO" as AutoDTO
   class "type AutoUpdateDTO" as AutoUpdateDTO
-  class "type CreatePayload" as CreatePayload
-  class "type UpdatePayload" as UpdatePayload
-  class "type IdInput" as IdInput
+
+     interface IdInput {
+        id: number
+    }
+
 
   class AutoMutationResolver << control >> << @Resolver() >> << @UseGuards() >> << @UseInterceptors() >> {
     + @Mutation() @Roles() async create(@Args() input: AutoDTO): Promise<CreatePayload>
@@ -50,8 +52,6 @@ package auto #DDDDDD {
 
   AutoMutationResolver ..> AutoDTO
   AutoMutationResolver ..> AutoUpdateDTO
-  AutoMutationResolver ..> CreatePayload
-  AutoMutationResolver ..> UpdatePayload
   AutoMutationResolver ..> IdInput
   AutoMutationResolver ..> Auto
   AutoMutationResolver ..> Promise
@@ -64,7 +64,5 @@ package auto #DDDDDD {
 }
 
 hide empty members
-
-footer (c) Jürgen Zimmermann
 
 @enduml

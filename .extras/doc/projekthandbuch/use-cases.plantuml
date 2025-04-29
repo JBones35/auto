@@ -13,8 +13,6 @@ rectangle auto {
     Kunde --> (Auto suchen)
     Kunde --> (Auto anlegen)
     Kunde --> (Auto ändern)
-    Kunde --> (Reparatur hinzufügen)
-    Kunde --> (Reparaturen anzeigen)
 }
 
 @enduml

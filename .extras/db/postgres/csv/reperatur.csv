@@ -1,4 +1,4 @@
-id;kosten;mechaniker;datum;buch_id
+id;kosten;mechaniker;datum;auto_id
 1;150;jonas;2025-04-09;1
 20;2000;philip;2025-04-08;20
 21;550;david;2025-04-09;20

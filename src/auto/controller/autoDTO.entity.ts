@@ -3,17 +3,34 @@
  * @packageDocumentation
  */
 
-import { ApiProperty } from "@nestjs/swagger";
-import { ArrayUnique, IsArray, IsInt, IsOptional, Matches, Max, MaxLength, Validate, ValidateNested, ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
-import Decimal from "decimal.js";
-import { AutoArt } from "../entity/auto.entity.js";
-import { Transform, Type } from "class-transformer";
-import { ReperaturDTO } from "./reperaturDTO.entity.js";
-import { MotorDTO } from "./motorDTO.entity.js";
+import { ApiProperty } from '@nestjs/swagger';
+import {
+    ArrayUnique,
+    IsArray,
+    IsInt,
+    IsOptional,
+    Matches,
+    Max,
+    MaxLength,
+    Validate,
+    ValidateNested,
+    ValidationArguments,
+    ValidatorConstraint,
+    ValidatorConstraintInterface,
+} from 'class-validator';
+import Decimal from 'decimal.js';
+import { AutoArt } from '../entity/auto.entity.js';
+import { Transform, Type } from 'class-transformer';
+import { ReperaturDTO } from './reperaturDTO.entity.js';
+import { MotorDTO } from './motorDTO.entity.js';
 
 export const MAX_YEAR = new Date().getFullYear();
 
-export const number2Decimal = ({ value }: { value: Decimal.Value | undefined }) => {
+export const number2Decimal = ({
+    value,
+}: {
+    value: Decimal.Value | undefined;
+}) => {
     if (value === undefined) {
         return;
     }

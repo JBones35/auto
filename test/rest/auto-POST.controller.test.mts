@@ -33,25 +33,28 @@ const token = inject('tokenRest');
 const neuerMotor: Omit<MotorDTO, 'drehzahl'> & {
     drehzahl: number;
 } = {
-        name: 'Beta',
-        ps: 150,
-        zylinder: 6,
-        drehzahl: 3453535.35,
+    name: 'Beta',
+    ps: 150,
+    zylinder: 6,
+    drehzahl: 3453535.35,
 };
 
-const neueReperatur: Omit<ReperaturDTO, 'kosten'| 'datum'> & {
+const neueReperatur: Omit<ReperaturDTO, 'kosten' | 'datum'> & {
     kosten: number;
-    datum: string
+    datum: string;
 } = {
-        mechaniker: 'Hans Müller',
-        datum: '2025-03-15',
-        kosten: 10103.35,
+    mechaniker: 'Hans Müller',
+    datum: '2025-03-15',
+    kosten: 10103.35,
 };
 
 const neuesAuto: Omit<AutoDTO, 'preis' | 'motor' | 'reperaturen'> & {
     preis: number;
-    motor: Omit<MotorDTO, 'drehzahl'> & { drehzahl: number; };
-    reperaturen: (Omit<ReperaturDTO, 'kosten'| 'datum'> & { kosten: number; datum: string; })[];
+    motor: Omit<MotorDTO, 'drehzahl'> & { drehzahl: number };
+    reperaturen: (Omit<ReperaturDTO, 'kosten' | 'datum'> & {
+        kosten: number;
+        datum: string;
+    })[];
 } = {
     fahrgestellnummer: 'WVWZZZ1JZXW000056',
     marke: 'audi',
@@ -61,9 +64,7 @@ const neuesAuto: Omit<AutoDTO, 'preis' | 'motor' | 'reperaturen'> & {
     preis: 255555.8,
     sicherheitsmerkmale: ['ESP', 'Airbags'],
     motor: neuerMotor,
-    reperaturen: [
-        neueReperatur,
-    ],
+    reperaturen: [neueReperatur],
 };
 const neuesAutoInvalid: Record<string, unknown> = {
     fahrgestellnummer: 'falsche FAHRGESTELLNUMMER',

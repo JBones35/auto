@@ -110,8 +110,22 @@ const dbPopulate = async (axiosInstance: AxiosInstance, token: string) => {
     console.log('DB wurde neu geladen');
 };
 
+type MyProvides = {
+    tokenRest: string;
+    tokenRestUser: string;
+    tokenGraphql: string;
+    tokenGraphqlUser: string;
+};
+
 // https://vitest.dev/config/#globalsetup
-export default async function setup(project: TestProject) {
+export default async function setup(
+    project: TestProject & {
+        provide: <K extends keyof MyProvides>(
+            key: K,
+            value: MyProvides[K],
+        ) => void;
+    },
+) {
     const accessTokenRest = await tokenRest(client);
     project.provide('tokenRest', accessTokenRest);
 
@@ -128,7 +142,7 @@ export default async function setup(project: TestProject) {
 }
 
 // https://www.typescriptlang.org/docs/handbook/declaration-merging.html#module-augmentation
-declare module 'vitest' {
+declare module 'vitest/node' {
     // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     export interface ProvidedContext {
         tokenRest: string;

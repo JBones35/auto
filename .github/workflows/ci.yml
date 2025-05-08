@@ -19,7 +19,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
+        
       - name: Build ausführen
         run: npm run build
 

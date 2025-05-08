@@ -34,7 +34,6 @@ jobs:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          # Nur die Linter aktivieren, die bestanden haben
           VALIDATE_ENV: true
           VALIDATE_GITHUB_ACTIONS: true
           VALIDATE_GIT_MERGE_CONFLICT_MARKERS: true

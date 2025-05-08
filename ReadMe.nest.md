@@ -46,7 +46,7 @@
   - [Node Best Practices](#node-best-practices)
   - [Lokaler Appserver mit Nest und dem Watch-Modus](#lokaler-appserver-mit-nest-und-dem-watch-modus)
   - [OpenAPI](#openapi)
-  - [Postman: Desktop-Anwendung und Extension für Visual Studio Code](#postman-desktop-anwendung-und-extension-für-vs-code)
+  - [Postman: Desktop-Anwendung und Extension für VS Code](#postman-desktop-anwendung-und-extension-für-visual-studio-code)
     - [Registrieren und Installieren](#registrieren-und-installieren)
     - [Workspace anlegen](#workspace-anlegen)
     - [Environments](#environments)
@@ -55,7 +55,7 @@
     - [Variable](#variable)
     - [Tokens durch Pre-request Scripts und Authorization-Header](#tokens-durch-pre-request-scripts-und-authorization-header)
     - [Tests in Postman](#tests-in-postman)
-    - [Erweiterung für Visual Studio Code](#erweiterung-für-vs-code)
+    - [Erweiterung für VS Code](#erweiterung-für-visual-studio-code)
     - [REST Client als Extension](#rest-client-als-extension)
   - [Tests aufrufen](#tests-aufrufen)
   - [Docker-Image und Docker Compose](#docker-image-und-docker-compose)
@@ -277,7 +277,8 @@ Controller-Klassen und -Methoden konfigurieren und dann in einem Webbrowser mit
 ## Postman: Desktop-Anwendung und Extension für Visual Studio Code
 
 Mit der Desktop-Applikation _Postman_ wie auch mit der Erweiterung _Postman_ für
-Visual Studio Code kann man u.a. REST-, GraphQL und gRPC-Schnittstellen interaktiv testen.
+Visual Studio Code kann man u.a. REST-, GraphQL und gRPC-Schnittstellen interaktiv
+testen.
 
 ### Registrieren und Installieren
 
@@ -388,9 +389,11 @@ findet man bei https://www.chaijs.com/api/bdd.
 
 ### Erweiterung für Visual Studio Code
 
-Seit Mai 2023 gibt es Postman auch als Erweiterung für Visual Studio Code. Damit kann man
+Seit Mai 2023 gibt es Postman auch als Erweiterung für Visual Studio Code. Damit
+kann man
 zwar (noch) nicht Workspaces, Collections, Folders und Requests anlegen, aber
-Requests abschicken, ohne dass man Visual Studio Code als Arbeitsumgebung verlassen muss.
+Requests abschicken, ohne dass man Visual Studio Code als Arbeitsumgebung verlassen
+muss.
 
 ### REST Client als Extension
 

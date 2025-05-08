@@ -54,4 +54,3 @@ jobs:
           VALIDATE_XML: true
           VALIDATE_YAML: true
           VALIDATE_YAML_PRETTIER: true
-

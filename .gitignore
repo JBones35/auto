@@ -34,6 +34,7 @@ dependencies.svg
 .extras/*.ogg
 .extras/*.webm
 src/config/resources/tls/key.pem
+src/config/resources/tls/certificate.crt
 sonar-project.properties
 
 # Logs

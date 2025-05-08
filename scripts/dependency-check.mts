@@ -24,7 +24,7 @@ import { exec } from 'node:child_process';
 import { platform } from 'node:os';
 import { resolve } from 'node:path';
 
-const nvdApiKey = '47fbc0a4-9240-4fda-9a26-d7d5624c16bf';
+const nvdApiKey = '177774fe-cf58-4cd4-8f45-58ea3b3988b6';
 const project = 'auto';
 
 let baseExecPath;

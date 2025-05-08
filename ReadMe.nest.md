@@ -46,7 +46,7 @@
   - [Node Best Practices](#node-best-practices)
   - [Lokaler Appserver mit Nest und dem Watch-Modus](#lokaler-appserver-mit-nest-und-dem-watch-modus)
   - [OpenAPI](#openapi)
-  - [Postman: Desktop-Anwendung und Extension für VS Code](#postman-desktop-anwendung-und-extension-für-vs-code)
+  - [Postman: Desktop-Anwendung und Extension für Visual Studio Code](#postman-desktop-anwendung-und-extension-für-vs-code)
     - [Registrieren und Installieren](#registrieren-und-installieren)
     - [Workspace anlegen](#workspace-anlegen)
     - [Environments](#environments)
@@ -55,7 +55,7 @@
     - [Variable](#variable)
     - [Tokens durch Pre-request Scripts und Authorization-Header](#tokens-durch-pre-request-scripts-und-authorization-header)
     - [Tests in Postman](#tests-in-postman)
-    - [Erweiterung für VS Code](#erweiterung-für-vs-code)
+    - [Erweiterung für Visual Studio Code](#erweiterung-für-vs-code)
     - [REST Client als Extension](#rest-client-als-extension)
   - [Tests aufrufen](#tests-aufrufen)
   - [Docker-Image und Docker Compose](#docker-image-und-docker-compose)
@@ -128,7 +128,7 @@ import { myClass } from './bar/index.js';
 ```
 
 Außerdem gibt es ab Node 17.1 das _Node Protocol_ für den Import von
-_Builtin Modules_, z.B.:
+_Built-in Modules_, z.B.:
 
 ```javascript
 import { resolve } from 'node:path';
@@ -148,7 +148,7 @@ Unterstützung für ESM ist notwendig in:
 - TypeScript
 - ts-node
 - ts-jest: versteht noch nicht die Datei-Endung `.mts` und beim Import `.mjs`
-- VS Code
+- Visual Studio Code
 - Node innerhalb von Jenkins
 
 ---
@@ -274,10 +274,10 @@ Controller-Klassen und -Methoden konfigurieren und dann in einem Webbrowser mit
 `https://localhost:3000/swagger` aufrufen. Die _Swagger JSON Datei_ kann man mit
 `https://localhost:3000/swagger-json` abrufen.
 
-## Postman: Desktop-Anwendung und Extension für VS Code
+## Postman: Desktop-Anwendung und Extension für Visual Studio Code
 
 Mit der Desktop-Applikation _Postman_ wie auch mit der Erweiterung _Postman_ für
-VS Code kann man u.a. REST-, GraphQL und gRPC-Schnittstellen interaktiv testen.
+Visual Studio Code kann man u.a. REST-, GraphQL und gRPC-Schnittstellen interaktiv testen.
 
 ### Registrieren und Installieren
 
@@ -331,7 +331,7 @@ folgendes festlegt:
 
 - Bezeichnung des Eintrags
 - GET, POST, PUT, PATCH, DELETE
-- URL mit ggf. Pfadparameter, z.B. :id
+- URL mit ggf. Pfadparameter, z.B. :ID
 - Im Karteireiter _Params_ sieht man dann die Pfadparameter und kann auch
   Query-Parameter spezifizieren.
 - Im Karteireiter _Headers_ sieht man voreingestellte Request-Header und kann
@@ -386,11 +386,11 @@ Zur Überprüfung von z.B. Statuscode, Response-Header oder Response-Body stellt
 Postman die _Chai Assertion Library_ mit _expect_ bereit. Details zu Chai
 findet man bei https://www.chaijs.com/api/bdd.
 
-### Erweiterung für VS Code
+### Erweiterung für Visual Studio Code
 
-Seit Mai 2023 gibt es Postman auch als Erweiterung für VS Code. Damit kann man
+Seit Mai 2023 gibt es Postman auch als Erweiterung für Visual Studio Code. Damit kann man
 zwar (noch) nicht Workspaces, Collections, Folders und Requests anlegen, aber
-Requests abschicken, ohne dass man VS Code als Arbeitsumgebung verlassen muss.
+Requests abschicken, ohne dass man Visual Studio Code als Arbeitsumgebung verlassen muss.
 
 ### REST Client als Extension
 
@@ -655,7 +655,7 @@ npm-Packages mit den _CVE_-Nummern der NIST-Datenbank abgeglichen.
 
 Von https://nvd.nist.gov/developers/request-an-api-key fordert man einen "API Key"
 an, um im Laufe des Semesters mit _OWASP Dependency Check_ die benutzte Software
-("3rd Party Libraries") auf Sicherheitslücken zu prüfen. Diesen API Key trägt
+("third-party Libraries") auf Sicherheitslücken zu prüfen. Diesen API Key trägt
 man im Skript `scripts\dependency-check.mts` als Wert der Variablen `nvdApiKey` ein.
 
 ```powershell
@@ -712,12 +712,12 @@ Mit AsciiDoctor und PlantUML ist die Dokumentation geschrieben.
 
 ### Preview von PlantUML-Dateien
 
-Durch das Tastaturkürzel `<Alt>d`. Dazu ist eine Internet-Verbindung notwendig.
+Durch das Tastaturkürzel `<Alt>d`. Dazu ist eine internet-Verbindung notwendig.
 Beispiele für PlantUML und AsciiDoctor sind im Unterverzeichnis `.extras\doc`.
 
 ### Einstellungen für Preview von AsciiDoctor-Dateien
 
-Zunächst müssen einmalig die Einstellungen (_Settings_) von VS Code geändert
+Zunächst müssen einmalig die Einstellungen (_Settings_) von Visual Studio Code geändert
 werden. Dazu klickt man in der linken unteren Ecke das Icon ("Rädchen") für die
 Einstellungen an und wählt den Menüpunkt _Einstellungen_ bzw. _Settings_ aus.
 Dann gibt man im Suchfeld `asciidoc.use_kroki` ein und setzt den Haken bei
@@ -732,7 +732,7 @@ Danach wählt man den Unterpunkt _Allow insecure content_ aus.
 
 ### Preview von AsciiDoctor-Dateien
 
-Durch das Tastaturkürzel `<Strg><Shift>v`. Dazu ist eine Internet-Verbindung
+Durch das Tastaturkürzel `<Strg><Shift>v`. Dazu ist eine internet-Verbindung
 notwendig.
 
 ### Dokumentation im Format HTML
@@ -789,9 +789,9 @@ Tipps:
 
 - `<Strg>#` : Kommentare setzen und entfernen
 - `<F1>`: Die Kommandopalette erscheint
-- `<Strg><Shift>v`: Vorschau für MarkDown und AsciiDoctor
+- `<Strg><Shift>v`: Vorschau für Markdown und AsciiDoctor
 - `<Alt>d`: Vorschau für PlantUml
-- _https://vscodecandothat.com_: Kurze Videos zu VS Code
+- _https://vscodecandothat.com_: Kurze Videos zu Visual Studio Code
 - _https://www.youtube.com/watch?v=beNIDKgdzwQ_: Video für Debugging
 
 ## Empfohlene Code-Konventionen

@@ -64,6 +64,10 @@ services:
         target: /opt/app/dist/config/resources/tls/key.pem
         read_only: true
       - type: bind
+        source: ../../../src/config/resources/tls/certificate.crt
+        target: /opt/app/dist/config/resources/tls/certificate.crt
+        read_only: true
+      - type: bind
         source: ../../../src/config/resources/sqlite/auto.sqlite
         target: /opt/app/dist/config/resources/sqlite/auto.sqlite
     networks: [acme-network]

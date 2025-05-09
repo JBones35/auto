@@ -30,7 +30,6 @@ jobs:
         run: npm run eslint
 
       - name: Docker Image bauen
-        working-directory: .extras/compose/auto
         run: docker build --tag juergenzimmermann/auto:2025.4.1-bookworm .
 
       - name: Docker Compose starten

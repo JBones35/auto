@@ -1,5 +1,5 @@
 import { AutoArt } from '../entity/auto.entity.js';
-/**
+ /**
  * Typdefinition für `find` in `auto-read.service` und `QueryBuilder.build()`.
  */
 export interface Suchkriterien {

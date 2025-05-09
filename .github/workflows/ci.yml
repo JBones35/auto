@@ -28,3 +28,6 @@ jobs:
 
       - name: ESLint ausführen
         run: npm run eslint
+
+      - name: Tests ausführen
+        run: npm run test

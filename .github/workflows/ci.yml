@@ -29,5 +29,17 @@ jobs:
       - name: ESLint ausführen
         run: npm run eslint
 
+      - name: Docker Compose starten
+        working-directory: .extras/compose/auto
+        run: docker compose up -d
+
+      - name: Warten bis Dienste bereit sind (optional)
+        run: sleep 10
+
       - name: Tests ausführen
         run: npm run test
+
+      - name: Docker Compose herunterfahren
+        if: always()
+        working-directory: .extras/compose/auto
+        run: docker compose down

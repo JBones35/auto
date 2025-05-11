@@ -174,12 +174,6 @@ export class AutoWriteService {
             mitReperaturen: true, // Sicherstellen, dass Reparaturen geladen werden für die Löschung
         });
 
-        // auto existiert nicht: findById wirft NotFoundException
-        // if (auto === undefined) {
-        // this.#logger.debug('delete: Kein Auto mit id=%d', id);
-        // return false;
-        // }
-
         let deleteResult: DeleteResult | undefined;
         await this.#repo.manager.transaction(async (transactionalMgr) => {
             const motorId = auto.motor?.id;

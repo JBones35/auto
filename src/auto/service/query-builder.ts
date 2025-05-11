@@ -127,7 +127,7 @@ export class QueryBuilder {
             const ilike =
                 typeOrmModuleOptions.type === 'postgres' ? 'ilike' : 'like';
             queryBuilder = queryBuilder.where(
-                `${this.#motorAlias}.name ${ilike} :name`, // Korrekter Alias für Motor-Tabelle verwenden
+                `${this.#motorAlias}.name ${ilike} :name`,
                 { name: `%${motor}%` },
             );
             useWhere = false;

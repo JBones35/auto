@@ -64,7 +64,10 @@ export class QueryBuilder {
      * und optional ein Flag zum Laden von Reparaturen enthält.
      * @returns Eine `SelectQueryBuilder<Auto>`-Instanz.
      */
-    buildId({ id, mitReperaturen = false }: BuildIdParams): SelectQueryBuilder<Auto> {
+    buildId({
+        id,
+        mitReperaturen = false,
+    }: BuildIdParams): SelectQueryBuilder<Auto> {
         const queryBuilder = this.#repo.createQueryBuilder(this.#autoAlias);
 
         queryBuilder.innerJoinAndSelect(
@@ -187,13 +190,13 @@ export class QueryBuilder {
             param[key] = value;
             queryBuilder = useWhere
                 ? queryBuilder.where(
-                    `${this.#autoAlias}.${key} = :${key}`,
-                    param,
-                )
+                      `${this.#autoAlias}.${key} = :${key}`,
+                      param,
+                  )
                 : queryBuilder.andWhere(
-                    `${this.#autoAlias}.${key} = :${key}`,
-                    param,
-                );
+                      `${this.#autoAlias}.${key} = :${key}`,
+                      param,
+                  );
             useWhere = false;
         });
 

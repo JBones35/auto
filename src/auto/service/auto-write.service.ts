@@ -214,7 +214,9 @@ export class AutoWriteService {
             fahrgestellnummer,
         );
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        if (await this.#repo.existsBy({ fahrgestellnummer: fahrgestellnummer! })) {
+        if (
+            await this.#repo.existsBy({ fahrgestellnummer: fahrgestellnummer! })
+        ) {
             throw new FahrgestellnummerExistsException(fahrgestellnummer);
         }
     }

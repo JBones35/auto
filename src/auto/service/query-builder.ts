@@ -190,13 +190,13 @@ export class QueryBuilder {
             param[key] = value;
             queryBuilder = useWhere
                 ? queryBuilder.where(
-                    `${this.#autoAlias}.${key} = :${key}`,
-                    param,
-                )
+                      `${this.#autoAlias}.${key} = :${key}`,
+                      param,
+                  )
                 : queryBuilder.andWhere(
-                    `${this.#autoAlias}.${key} = :${key}`,
-                    param,
-                );
+                      `${this.#autoAlias}.${key} = :${key}`,
+                      param,
+                  );
             useWhere = false;
         });
 

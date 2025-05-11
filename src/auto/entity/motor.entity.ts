@@ -9,6 +9,10 @@ import {
 import { Auto } from './auto.entity.js';
 import { DecimalTransformer } from './decimal-transformer.js';
 
+/**
+ * Entitätsklasse, die einen Motor in der Datenbank repräsentiert.
+ * Definiert die Struktur und die Beziehungen eines Motors, der einem Auto zugeordnet sein kann.
+ */
 @Entity()
 export class Motor {
     @PrimaryGeneratedColumn()
@@ -33,6 +37,12 @@ export class Motor {
     @JoinColumn({ name: 'auto_id' })
     auto: Auto | undefined;
 
+    /**
+     * Gibt eine String-Repräsentation des Motor-Objekts zurück.
+     * Die Repräsentation ist ein JSON-String, der die ID, den Namen, die PS-Zahl,
+     * die Zylinderanzahl und die Drehzahl des Motors enthält.
+     * @returns Eine JSON-formatierte Zeichenkette des Motor-Objekts.
+     */
     public toString = (): string =>
         JSON.stringify({
             id: this.id,

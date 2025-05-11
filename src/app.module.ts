@@ -32,6 +32,12 @@ import { LoggerModule } from './logger/logger.module.js';
 import { RequestLoggerMiddleware } from './logger/request-logger.middleware.js';
 import { KeycloakModule } from './security/keycloak/keycloak.module.js';
 
+/**
+ * Das Hauptmodul der Anwendung.
+ * Dieses Modul importiert und konfiguriert alle notwendigen Anwendungsmodule
+ * wie Datenbankanbindung, GraphQL, Authentifizierung und anwendungsspezifische Feature-Module.
+ * Es implementiert {@link NestModule}, um Middleware zu konfigurieren.
+ */
 @Module({
     imports: [
         AdminModule,
@@ -44,6 +50,12 @@ import { KeycloakModule } from './security/keycloak/keycloak.module.js';
     ],
 })
 export class AppModule implements NestModule {
+    /**
+     * Konfiguriert Middleware für die Anwendung.
+     * Hier wird die {@link RequestLoggerMiddleware} für spezifische Routen
+     * (AutoGetController, AutoWriteController, 'auth', 'graphql') registriert.
+     * @param consumer Der {@link MiddlewareConsumer}, der zum Konfigurieren der Middleware verwendet wird.
+     */
     configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(RequestLoggerMiddleware)

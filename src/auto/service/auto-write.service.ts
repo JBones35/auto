@@ -26,7 +26,7 @@ export type UpdateParams = {
 
 /**
  * Die Klasse `AutoWriteService` implementiert den Anwendungskern für das
- * Schreiben von Bücher und greift mit _TypeORM_ auf die DB zu.
+ * Schreiben von Autos und greift mit _TypeORM_ auf die DB zu.
  */
 @Injectable()
 export class AutoWriteService {
@@ -42,6 +42,13 @@ export class AutoWriteService {
 
     readonly #logger = getLogger(AutoWriteService.name);
 
+    /**
+     * Initialisiert eine neue Instanz des `AutoWriteService`.
+     * @param repo Das TypeORM Repository für die `Auto`-Entität.
+     * @param fileRepo Das TypeORM Repository für die `AutoFile`-Entität.
+     * @param readService Der `AutoReadService` für Leseoperationen.
+     * @param mailService Der `MailService` zum Versenden von E-Mails.
+     */
     constructor(
         @InjectRepository(Auto) repo: Repository<Auto>,
         @InjectRepository(AutoFile) fileRepo: Repository<AutoFile>,
@@ -56,9 +63,9 @@ export class AutoWriteService {
 
     /**
      * Ein neues Auto soll angelegt werden.
-     * @param auto Das neu abzulegende Auto
-     * @returns Die ID des neu angelegten Autos
-     * @throws FahrgestellnummerExists falls die Fahrgestellnummer bereits existiert
+     * @param auto Das neu abzulegende Auto.
+     * @returns Die ID des neu angelegten Autos als Promise.
+     * @throws FahrgestellnummerExistsException Falls die Fahrgestellnummer bereits existiert.
      */
     async create(auto: Auto): Promise<number> {
         this.#logger.debug('create: auto=%o', auto);
@@ -71,11 +78,12 @@ export class AutoWriteService {
 
     /**
      * Zu einem vorhandenen Auto eine Binärdatei mit z.B. einem Bild abspeichern.
-     * @param autoId ID des vorhandenen Autos
-     * @param data Bytes der Datei
-     * @param filename Dateiname
-     * @param mimetype MIME-Type
-     * @returns Entity-Objekt für `AutoFile`
+     * @param autoId ID des vorhandenen Autos.
+     * @param data Bytes der Datei als Buffer.
+     * @param filename Dateiname der hochzuladenden Datei.
+     * @param mimetype MIME-Type der Datei.
+     * @returns Das erstellte {@link AutoFile}-Objekt als Promise.
+     * @throws NotFoundException Falls kein Auto zur gegebenen ID existiert.
      */
     // eslint-disable-next-line max-params
     async addFile(
@@ -93,6 +101,7 @@ export class AutoWriteService {
 
         const auto = await this.#readService.findById({ id: autoId });
 
+        // Vorhandene Datei ggf. löschen
         await this.#fileRepo
             .createQueryBuilder('auto_file')
             .delete()
@@ -116,15 +125,14 @@ export class AutoWriteService {
     }
 
     /**
-     * Ein vorhandenes Auto soll aktualisiert werden. "Destructured" Argument
-     * mit id (ID des zu aktualisierenden Auto), auto (zu aktualisierendes Auto)
-     * und version (Versionsnummer für optimistische Synchronisation).
-     * @returns Die neue Versionsnummer gemäß optimistischer Synchronisation
-     * @throws NotFoundException falls kein Auto zur ID vorhanden ist
-     * @throws VersionInvalidException falls die Versionsnummer ungültig ist
-     * @throws VersionOutdatedException falls die Versionsnummer veraltet ist
+     * Ein vorhandenes Auto soll aktualisiert werden.
+     * @param params Ein Objekt vom Typ {@link UpdateParams} mit ID, den zu aktualisierenden Auto-Daten und der Version.
+     * @returns Die neue Versionsnummer gemäß optimistischer Synchronisation als Promise.
+     * @throws NotFoundException Falls kein Auto zur ID vorhanden ist.
+     * @throws VersionInvalidException Falls die Versionsnummer ungültig ist.
+     * @throws VersionOutdatedException Falls die Versionsnummer veraltet ist.
      */
-    async update({ id, auto, version }: UpdateParams) {
+    async update({ id, auto, version }: UpdateParams): Promise<number> {
         this.#logger.debug(
             'update: id=%d, auto=%o, version=%s',
             id,
@@ -138,8 +146,10 @@ export class AutoWriteService {
 
         const validateResult = await this.#validateUpdate(auto, id, version);
         this.#logger.debug('update: validateResult=%o', validateResult);
+        // validateResult ist ggf. eine Exception bzw. Error
         if (!(validateResult instanceof Auto)) {
-            return validateResult;
+            // TODO Fehlerbehandlung verbessern durch spezifische Exceptions
+            throw validateResult;
         }
 
         const autoNeu = validateResult;
@@ -153,20 +163,26 @@ export class AutoWriteService {
 
     /**
      * Ein Auto wird asynchron anhand seiner ID gelöscht.
-     *
-     * @param id ID des zu löschenden Autos
-     * @returns true, falls das Auto vorhanden war und gelöscht wurde. Sonst false.
+     * Bei Erfolg werden auch der zugehörige Motor und alle Reparaturen gelöscht.
+     * @param id ID des zu löschenden Autos.
+     * @returns `true`, falls das Auto vorhanden war und gelöscht wurde, sonst `false`, als Promise.
+     * @throws NotFoundException Falls kein Auto zur ID gefunden wird.
      */
-    async delete(id: number) {
+    async delete(id: number): Promise<boolean> {
         this.#logger.debug('delete: id=%d', id);
         const auto = await this.#readService.findById({
             id,
-            mitReperaturen: true,
+            mitReperaturen: true, // Sicherstellen, dass Reparaturen geladen werden für die Löschung
         });
+
+        // auto existiert nicht: findById wirft NotFoundException
+        // if (auto === undefined) {
+        // this.#logger.debug('delete: Kein Auto mit id=%d', id);
+        // return false;
+        // }
 
         let deleteResult: DeleteResult | undefined;
         await this.#repo.manager.transaction(async (transactionalMgr) => {
-            // TODO "cascade" funktioniert nicht beim Loeschen
             const motorId = auto.motor?.id;
             if (motorId !== undefined) {
                 await transactionalMgr.delete(Motor, motorId);
@@ -175,6 +191,13 @@ export class AutoWriteService {
             for (const reperatur of reperaturen) {
                 await transactionalMgr.delete(Reperatur, reperatur.id);
             }
+
+            // Ggf. AutoFile löschen, falls vorhanden und verknüpft
+            const autoFile = await this.#fileRepo.findOneBy({ auto: { id } });
+            if (autoFile) {
+                await transactionalMgr.delete(AutoFile, autoFile.id);
+            }
+
             deleteResult = await transactionalMgr.delete(Auto, id);
             this.#logger.debug('delete: deleteResult=%o', deleteResult);
         });
@@ -191,7 +214,8 @@ export class AutoWriteService {
             '#validateCreate: fahrgestellnummer=%s',
             fahrgestellnummer,
         );
-        if (await this.#repo.existsBy({ fahrgestellnummer })) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        if (await this.#repo.existsBy({ fahrgestellnummer: fahrgestellnummer! })) {
             throw new FahrgestellnummerExistsException(fahrgestellnummer);
         }
     }
@@ -199,7 +223,7 @@ export class AutoWriteService {
     async #sendmail(auto: Auto) {
         const subject = `Neues Auto ${auto.id}`;
         const motor = auto.motor?.name ?? 'N/A';
-        const body = `Das Auto mit dem Motornamen <strong>${motor}</strong> ist angelegt`;
+        const body = `Das Auto "${auto.marke} ${auto.modell}" mit dem Motornamen <strong>${motor}</strong> ist angelegt.`;
         await this.#mailService.sendmail({ subject, body });
     }
 

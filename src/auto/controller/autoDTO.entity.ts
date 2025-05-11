@@ -41,8 +41,17 @@ export const number2Decimal = ({
     return Decimal(value);
 };
 
+/**
+ * Validator-Constraint, um sicherzustellen, dass ein Decimal-Wert nicht kleiner als ein angegebener Minimalwert ist.
+ */
 @ValidatorConstraint({ name: 'decimalMin', async: false })
 export class DecimalMin implements ValidatorConstraintInterface {
+    /**
+     * Validiert, ob der gegebene Wert größer oder gleich dem Minimalwert ist.
+     * @param value Der zu validierende Decimal-Wert.
+     * @param args Die Validierungsargumente, die den Minimalwert enthalten.
+     * @returns `true`, wenn der Wert gültig ist oder `undefined`, andernfalls `false`.
+     */
     validate(value: Decimal | undefined, args: ValidationArguments) {
         if (value === undefined) {
             return true;
@@ -51,13 +60,27 @@ export class DecimalMin implements ValidatorConstraintInterface {
         return value.greaterThanOrEqualTo(minValue!);
     }
 
+    /**
+     * Gibt die Standardfehlermeldung zurück, wenn die Validierung fehlschlägt.
+     * @param args Die Validierungsargumente, die den Minimalwert enthalten.
+     * @returns Die Fehlermeldung als String.
+     */
     defaultMessage(args: ValidationArguments) {
         return `Der Wert muss groesser oder gleich ${(args.constraints[0] as Decimal).toNumber()} sein.`;
     }
 }
 
+/**
+ * Validator-Constraint, um sicherzustellen, dass ein Decimal-Wert nicht größer als ein angegebener Maximalwert ist.
+ */
 @ValidatorConstraint({ name: 'decimalMax', async: false })
 export class DecimalMax implements ValidatorConstraintInterface {
+    /**
+     * Validiert, ob der gegebene Wert kleiner oder gleich dem Maximalwert ist.
+     * @param value Der zu validierende Decimal-Wert.
+     * @param args Die Validierungsargumente, die den Maximalwert enthalten.
+     * @returns `true`, wenn der Wert gültig ist oder `undefined`, andernfalls `false`.
+     */
     validate(value: Decimal | undefined, args: ValidationArguments) {
         if (value === undefined) {
             return true;
@@ -66,13 +89,19 @@ export class DecimalMax implements ValidatorConstraintInterface {
         return value.lessThanOrEqualTo(maxValue!);
     }
 
+    /**
+     * Gibt die Standardfehlermeldung zurück, wenn die Validierung fehlschlägt.
+     * @param args Die Validierungsargumente, die den Maximalwert enthalten.
+     * @returns Die Fehlermeldung als String.
+     */
     defaultMessage(args: ValidationArguments) {
         return `Der Wert muss kleiner oder gleich ${(args.constraints[0] as Decimal).toNumber()} sein.`;
     }
 }
 
 /**
- * Entity-Klasse für Autos ohne TypeORM und ohne Referenzen.
+ * DTO-Klasse für Autos ohne Referenzen zu anderen Entitäten.
+ * Repräsentiert die Basisdaten eines Autos.
  */
 export class AutoDtoOhneRef {
     @ApiProperty({ example: 'W0L000051T2123456', type: String })
@@ -111,7 +140,8 @@ export class AutoDtoOhneRef {
 }
 
 /**
- * Entity-Klasse für Autos ohne TypeORM.
+ * DTO-Klasse für Autos, die Referenzen zu Motor- und Reparatur-DTOs enthält.
+ * Erweitert {@link AutoDtoOhneRef}.
  */
 export class AutoDTO extends AutoDtoOhneRef {
     @ValidateNested()

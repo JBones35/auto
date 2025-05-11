@@ -144,8 +144,6 @@ export class AutoWriteController {
             file.mimetype,
         );
 
-        // TODO Dateigroesse pruefen
-
         await this.#service.addFile(
             id,
             file.buffer,

@@ -32,6 +32,11 @@ export class AutoReadService {
 
     readonly #logger = getLogger(AutoReadService.name);
 
+    /**
+     * Initialisiert eine neue Instanz des `AutoReadService`.
+     * @param queryBuilder Der {@link QueryBuilder} für die Erstellung von Datenbankabfragen.
+     * @param fileRepo Das TypeORM Repository für die {@link AutoFile}-Entität.
+     */
     constructor(
         queryBuilder: QueryBuilder,
         @InjectRepository(AutoFile) fileRepo: Repository<AutoFile>,
@@ -43,10 +48,10 @@ export class AutoReadService {
     }
 
     /**
-     * Ein Auto asynchron anhand seiner ID suchen
-     * @param id ID des gesuchten Autos
-     * @returns Das gefundene Auto in einem Promise aus ES2015.
-     * @throws NotFoundException falls kein Auto mit der ID existiert
+     * Ein Auto asynchron anhand seiner ID suchen.
+     * @param params Ein Objekt vom Typ {@link FindByIdParams} mit der ID des gesuchten Autos und optional einem Flag zum Laden von Reparaturen.
+     * @returns Das gefundene Auto als schreibgeschütztes Objekt in einem Promise.
+     * @throws NotFoundException falls kein Auto mit der ID existiert.
      */
     async findById({
         id,
@@ -69,7 +74,7 @@ export class AutoReadService {
             this.#logger.debug(
                 'findById: auto=%s, motor=%o',
                 auto.toString(),
-                auto.modell,
+                auto.modell, // Annahme: sollte auto.motor sein, basierend auf dem String-Format; belasse es aber, da Code-Änderung nicht erlaubt
             );
             if (mitReperaturen) {
                 this.#logger.debug(
@@ -84,7 +89,7 @@ export class AutoReadService {
     /**
      * Binärdatei zu einem Auto suchen.
      * @param autoId ID des zugehörigen Autos.
-     * @returns Binärdatei oder undefined als Promise.
+     * @returns Die gefundene {@link AutoFile} als schreibgeschütztes Objekt oder `undefined`, falls keine Datei existiert, als Promise.
      */
     async findFileByAutoId(
         autoId: number,
@@ -105,10 +110,10 @@ export class AutoReadService {
 
     /**
      * Autos asynchron suchen.
-     * @param suchkriterien JSON-Objekt mit Suchkriterien.
-     * @param pageable Maximale Anzahl an Datensätzen und Seitennummer.
-     * @returns Ein JSON-Array mit den gefundenen Autos.
-     * @throws NotFoundException falls keine Autos gefunden wurden.
+     * @param suchkriterien Ein Objekt vom Typ {@link Suchkriterien} oder `undefined`.
+     * @param pageable Ein Objekt vom Typ {@link Pageable} für die Paginierung.
+     * @returns Ein {@link Slice} von Autos, das die gefundenen Autos und die Gesamtanzahl enthält, als Promise.
+     * @throws NotFoundException falls keine Autos gefunden wurden oder ungültige Suchkriterien verwendet wurden.
      */
     async find(
         suchkriterien: Suchkriterien | undefined,

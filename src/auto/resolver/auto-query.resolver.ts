@@ -16,6 +16,10 @@ export type SuchkriterienInput = {
     readonly suchkriterien: Suchkriterien;
 };
 
+/**
+ * GraphQL Resolver-Klasse für Abfragen, die Autos betreffen.
+ * Stellt Endpunkte zum Suchen und Abrufen von Autos bereit.
+ */
 @Resolver('Auto')
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(ResponseTimeInterceptor)
@@ -24,10 +28,20 @@ export class AutoQueryResolver {
 
     readonly #logger = getLogger(AutoQueryResolver.name);
 
+    /**
+     * Initialisiert eine neue Instanz des `AutoQueryResolver`.
+     * @param service Der `AutoReadService` für Leseoperationen.
+     */
     constructor(service: AutoReadService) {
         this.#service = service;
     }
 
+    /**
+     * Findet ein Auto anhand seiner ID.
+     * Dieser Endpunkt ist öffentlich zugänglich.
+     * @param id Ein {@link IdInput}-Objekt, das die ID des gesuchten Autos enthält.
+     * @returns Das gefundene Auto-Objekt oder `undefined`, falls kein Auto mit der ID existiert.
+     */
     @Query('auto')
     @Public()
     async findById(@Args() { id }: IdInput) {
@@ -45,6 +59,12 @@ export class AutoQueryResolver {
         return auto;
     }
 
+    /**
+     * Findet Autos basierend auf optionalen Suchkriterien.
+     * Dieser Endpunkt ist öffentlich zugänglich.
+     * @param input Ein optionales {@link SuchkriterienInput}-Objekt, das die Suchkriterien enthält.
+     * @returns Ein Array von Auto-Objekten, die den Suchkriterien entsprechen.
+     */
     @Query('autos')
     @Public()
     async find(@Args() input: SuchkriterienInput | undefined) {

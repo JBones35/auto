@@ -21,6 +21,10 @@ export type UpdatePayload = {
     readonly version: number;
 };
 
+/**
+ * DTO-Klasse für die Aktualisierung eines Autos.
+ * Erweitert {@link AutoDTO} um die Felder `id` und `version`, die für den Update-Vorgang benötigt werden.
+ */
 export class AutoUpdateDTO extends AutoDTO {
     @IsNumberString()
     readonly id!: string;
@@ -29,6 +33,10 @@ export class AutoUpdateDTO extends AutoDTO {
     @Min(0)
     readonly version!: number;
 }
+/**
+ * GraphQL Resolver-Klasse für Mutationen, die Autos betreffen.
+ * Stellt Endpunkte zum Erstellen, Aktualisieren und Löschen von Autos bereit.
+ */
 @Resolver('Auto')
 // alternativ: globale Aktivierung der Guards https://docs.nestjs.com/security/authorization#basic-rbac-implementation
 @UseGuards(AuthGuard)
@@ -39,10 +47,20 @@ export class AutoMutationResolver {
 
     readonly #logger = getLogger(AutoMutationResolver.name);
 
+    /**
+     * Initialisiert eine neue Instanz des `AutoMutationResolver`.
+     * @param service Der `AutoWriteService` für Schreiboperationen.
+     */
     constructor(service: AutoWriteService) {
         this.#service = service;
     }
 
+    /**
+     * Erstellt ein neues Auto basierend auf den übergebenen Daten.
+     * Erfordert die Rollen 'admin' oder 'user'.
+     * @param autoDTO Die Daten des zu erstellenden Autos als {@link AutoDTO}.
+     * @returns Ein {@link CreatePayload}-Objekt, das die ID des neu erstellten Autos enthält.
+     */
     @Mutation()
     @Roles('admin', 'user')
     async create(@Args('input') autoDTO: AutoDTO) {
@@ -55,6 +73,12 @@ export class AutoMutationResolver {
         return payload;
     }
 
+    /**
+     * Aktualisiert ein bestehendes Auto mit den übergebenen Daten.
+     * Erfordert die Rollen 'admin' oder 'user'.
+     * @param autoDTO Die Daten des zu aktualisierenden Autos als {@link AutoUpdateDTO}.
+     * @returns Ein {@link UpdatePayload}-Objekt, das die neue Versionsnummer des aktualisierten Autos enthält.
+     */
     @Mutation()
     @Roles('admin', 'user')
     async update(@Args('input') autoDTO: AutoUpdateDTO) {
@@ -68,12 +92,17 @@ export class AutoMutationResolver {
             auto,
             version: versionStr,
         });
-        // TODO BadUserInputError
         this.#logger.debug('updateAuto: versionResult=%d', versionResult);
         const payload: UpdatePayload = { version: versionResult };
         return payload;
     }
 
+    /**
+     * Löscht ein Auto anhand seiner ID.
+     * Erfordert die Rolle 'admin'.
+     * @param id Ein {@link IdInput}-Objekt, das die ID des zu löschenden Autos enthält.
+     * @returns `true`, wenn das Auto erfolgreich gelöscht wurde, andernfalls `false`.
+     */
     @Mutation()
     @Roles('admin')
     async delete(@Args() id: IdInput) {

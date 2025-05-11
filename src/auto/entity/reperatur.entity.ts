@@ -9,6 +9,10 @@ import { DecimalTransformer } from './decimal-transformer.js';
 import Decimal from 'decimal.js';
 import { Auto } from './auto.entity.js';
 
+/**
+ * Entitätsklasse, die eine Reparatur in der Datenbank repräsentiert.
+ * Definiert die Struktur und die Beziehungen einer Reparatur, die einem Auto zugeordnet ist.
+ */
 @Entity()
 export class Reperatur {
     @PrimaryGeneratedColumn()
@@ -31,6 +35,12 @@ export class Reperatur {
     @JoinColumn({ name: 'auto_id' })
     auto: Auto | undefined;
 
+    /**
+     * Gibt eine String-Repräsentation des Reperatur-Objekts zurück.
+     * Die Repräsentation ist ein JSON-String, der die ID, die Kosten,
+     * den Mechaniker und das Datum der Reparatur enthält.
+     * @returns Eine JSON-formatierte Zeichenkette des Reperatur-Objekts.
+     */
     public toString = (): string =>
         JSON.stringify({
             id: this.id,

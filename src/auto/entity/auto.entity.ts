@@ -18,6 +18,10 @@ import { AutoFile } from './autoFile.entity.js';
 
 export type AutoArt = 'PKW' | 'LKW';
 
+/**
+ * Entitätsklasse, die ein Auto in der Datenbank repräsentiert.
+ * Definiert die Struktur und die Beziehungen eines Autos.
+ */
 @Entity()
 export class Auto {
     @PrimaryGeneratedColumn()
@@ -84,6 +88,11 @@ export class Auto {
     })
     readonly aktualisiert: Date | undefined;
 
+    /**
+     * Gibt eine String-Repräsentation des Auto-Objekts zurück.
+     * Die Repräsentation ist ein JSON-String, der ausgewählte Eigenschaften des Autos enthält.
+     * @returns Eine JSON-formatierte Zeichenkette des Auto-Objekts.
+     */
     public toString = (): string =>
         JSON.stringify({
             id: this.id,

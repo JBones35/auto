@@ -34,8 +34,17 @@ export const number2Decimal = ({
     return Decimal(value);
 };
 
+/**
+ * Validator-Constraint, um sicherzustellen, dass ein Decimal-Wert nicht kleiner als ein angegebener Minimalwert ist.
+ */
 @ValidatorConstraint({ name: 'decimalMin', async: false })
 export class DecimalMin implements ValidatorConstraintInterface {
+    /**
+     * Validiert, ob der gegebene Wert größer oder gleich dem Minimalwert ist.
+     * @param value Der zu validierende Decimal-Wert.
+     * @param args Die Validierungsargumente, die den Minimalwert enthalten.
+     * @returns `true`, wenn der Wert gültig ist oder `undefined`, andernfalls `false`.
+     */
     validate(value: Decimal | undefined, args: ValidationArguments) {
         if (value === undefined) {
             return true;
@@ -44,13 +53,19 @@ export class DecimalMin implements ValidatorConstraintInterface {
         return value.greaterThanOrEqualTo(minValue!);
     }
 
+    /**
+     * Gibt die Standardfehlermeldung zurück, wenn die Validierung fehlschlägt.
+     * @param args Die Validierungsargumente, die den Minimalwert enthalten.
+     * @returns Die Fehlermeldung als String.
+     */
     defaultMessage(args: ValidationArguments) {
         return `Der Wert muss groesser oder gleich ${(args.constraints[0] as Decimal).toNumber()} sein.`;
     }
 }
 
 /**
- * Entity-Klasse für Reperaturen ohne TypeORM.
+ * DTO-Klasse (Data Transfer Object) für eine Reparatur.
+ * Repräsentiert die Datenstruktur einer Reparatur mit ihren Eigenschaften.
  */
 export class ReperaturDTO {
     @IsOptional()

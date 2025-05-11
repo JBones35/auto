@@ -148,7 +148,6 @@ export class AutoWriteService {
         this.#logger.debug('update: validateResult=%o', validateResult);
         // validateResult ist ggf. eine Exception bzw. Error
         if (!(validateResult instanceof Auto)) {
-            // TODO Fehlerbehandlung verbessern durch spezifische Exceptions
             throw validateResult;
         }
 
@@ -174,12 +173,6 @@ export class AutoWriteService {
             id,
             mitReperaturen: true, // Sicherstellen, dass Reparaturen geladen werden für die Löschung
         });
-
-        // auto existiert nicht: findById wirft NotFoundException
-        // if (auto === undefined) {
-        // this.#logger.debug('delete: Kein Auto mit id=%d', id);
-        // return false;
-        // }
 
         let deleteResult: DeleteResult | undefined;
         await this.#repo.manager.transaction(async (transactionalMgr) => {

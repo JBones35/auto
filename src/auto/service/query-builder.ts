@@ -127,7 +127,7 @@ export class QueryBuilder {
             const ilike =
                 typeOrmModuleOptions.type === 'postgres' ? 'ilike' : 'like';
             queryBuilder = queryBuilder.where(
-                `${this.#motorAlias}.name ${ilike} :name`, // Korrekter Alias für Motor-Tabelle verwenden
+                `${this.#motorAlias}.name ${ilike} :name`,
                 { name: `%${motor}%` },
             );
             useWhere = false;
@@ -160,7 +160,7 @@ export class QueryBuilder {
 
         const addSicherheitsmerkmalCondition = (merkmal: string) => {
             const condition = `${this.#autoAlias}.sicherheitsmerkmale like :merkmal`;
-            const params = { merkmal: `%${merkmal.toUpperCase()}%` }; // Sicherstellen, dass der Suchbegriff richtig formatiert ist
+            const params = { merkmal: `%${merkmal.toUpperCase()}%` };
             queryBuilder = useWhere
                 ? queryBuilder.where(condition, params)
                 : queryBuilder.andWhere(condition, params);

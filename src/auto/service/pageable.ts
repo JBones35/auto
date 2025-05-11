@@ -31,7 +31,7 @@ export function createPageable({ number, size }: PageableProps): Pageable {
     } else {
         sizeInt = sizeFloat;
         if (sizeInt < 1 || sizeInt > MAX_PAGE_SIZE) {
-            sizeInt = DEFAULT_PAGE_NUMBER; // Sollte hier DEFAULT_PAGE_SIZE oder eine Fehlerbehandlung sein? Aktuell wird 0 verwendet.
+            sizeInt = DEFAULT_PAGE_NUMBER;
         }
     }
 

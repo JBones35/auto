@@ -174,32 +174,4 @@ export class AutoMutationResolver {
             aktualisiert: new Date(),
         };
     }
-
-    // #errorMsgCreateauto(err: CreateError) {
-    //     switch (err.type) {
-    //         case 'IsbnExists': {
-    //             return `Die ISBN ${err.isbn} existiert bereits`;
-    //         }
-    //         default: {
-    //             return 'Unbekannter Fehler';
-    //         }
-    //     }
-    // }
-
-    // #errorMsgUpdateauto(err: UpdateError) {
-    //     switch (err.type) {
-    //         case 'autoNotExists': {
-    //             return `Es gibt kein auto mit der ID ${err.id}`;
-    //         }
-    //         case 'VersionInvalid': {
-    //             return `"${err.version}" ist keine gueltige Versionsnummer`;
-    //         }
-    //         case 'VersionOutdated': {
-    //             return `Die Versionsnummer "${err.version}" ist nicht mehr aktuell`;
-    //         }
-    //         default: {
-    //             return 'Unbekannter Fehler';
-    //         }
-    //     }
-    // }
 }

@@ -74,7 +74,7 @@ export class AutoReadService {
             this.#logger.debug(
                 'findById: auto=%s, motor=%o',
                 auto.toString(),
-                auto.modell, // Annahme: sollte auto.motor sein, basierend auf dem String-Format; belasse es aber, da Code-Änderung nicht erlaubt
+                auto.motor,
             );
             if (mitReperaturen) {
                 this.#logger.debug(
